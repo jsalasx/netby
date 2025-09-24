@@ -1,4 +1,4 @@
-namespace MsProducts.Application.Models;
+namespace Shared.Dto;
 
 public class CreateProductRequestDto
 {

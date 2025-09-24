@@ -1,1 +1,6 @@
 /data
+MsProducts/bin/
+MsProducts/obj/
+MsTransactions/bin/
+MsTransactions/obj/
+Shared/obj
