@@ -16,6 +16,34 @@ public class ProductRepository : IProductRepository
         return await _db.Products.FindAsync(new object[] { id }, ct);
     }
 
+    public async Task<long> CountByFilterAsync(ProductFilterRequestDto filter, CancellationToken ct)
+    {
+        var query = _db.Products.AsQueryable();
+
+        if (filter.Id.HasValue)
+            query = query.Where(p => p.Id == filter.Id.Value);
+
+        if (!string.IsNullOrEmpty(filter.Name))
+            query = query.Where(p => p.Name.Contains(filter.Name));
+
+        if (!string.IsNullOrEmpty(filter.Category))
+            query = query.Where(p => p.Category == filter.Category);
+
+        if (filter.PriceGreaterThanEqual.HasValue)
+            query = query.Where(p => p.Price >= filter.PriceGreaterThanEqual.Value);
+
+        if (filter.PriceLessThan.HasValue)
+            query = query.Where(p => p.Price < filter.PriceLessThan.Value);
+
+        if (filter.StockGreaterThanEqual.HasValue)
+            query = query.Where(p => p.Stock >= filter.StockGreaterThanEqual.Value);
+
+        if (filter.StockLessThan.HasValue)
+            query = query.Where(p => p.Stock < filter.StockLessThan.Value);
+
+        return await query.LongCountAsync(ct);
+    }
+
     public async Task<IEnumerable<ProductEntity>> GetByFilterAsync(ProductFilterRequestDto filter, CancellationToken ct)
     {
         var query = _db.Products.AsQueryable();

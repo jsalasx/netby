@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MsProducts.Domain.Entities;
 using MsProducts.Application.Models;
 using MsProducts.Application.UseCase;
+using MsProducts.Infrastructure.Mappers;
 
 
 
@@ -43,7 +44,7 @@ public class ProductsController : ControllerBase
             if (product is null)
                 return NotFound($"Product with ID {id} not found");
 
-            var response = MapToResponseDto(product);
+            var response = ProductMapper.ToResponse(product);
             return Ok(response);
         }
         catch (Exception ex)
@@ -58,10 +59,10 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            var product = MapToEntity(request);
+            var product = ProductMapper.ToEntity(request);
             await _addProductUseCase.Execute(product, ct);
             
-            var response = MapToResponseDto(product);
+            var response = ProductMapper.ToResponse(product);
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, response);
         }
         catch (ArgumentException ex)
@@ -80,7 +81,7 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            var product = MapToEntity(request, id);
+            var product = ProductMapper.ToEntity(request, id);
             await _updateProductUseCase.Execute(product, ct);
             return NoContent();
         }
@@ -127,8 +128,7 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            var products = await _getProductsByFilterUseCase.Execute(filter, ct);
-            var response = products.Select(MapToResponseDto);
+            var response = await _getProductsByFilterUseCase.Execute(filter, ct);
             return Ok(response);
         }
         catch (Exception ex)
@@ -136,48 +136,5 @@ public class ProductsController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
-    // Helper methods for mapping
-    private ProductEntity MapToEntity(CreateProductRequestDto dto)
-    {
-        return new ProductEntity
-        {
-            Name = dto.Name,
-            Description = dto.Description,
-            Category = dto.Category,
-            ImageUri = dto.ImageUri,
-            Price = dto.Price,
-            Stock = dto.Stock
-        };
-    }
-
-    private ProductEntity MapToEntity(UpdateProductRequestDto dto, Guid id)
-    {
-        return new ProductEntity
-        {
-            Id = id,
-            Name = dto.Name,
-            Description = dto.Description,
-            Category = dto.Category,
-            ImageUri = dto.ImageUri,
-            Price = dto.Price,
-            Stock = dto.Stock
-        };
-    }
-
-    private ProductResponseDto MapToResponseDto(ProductEntity entity)
-    {
-        return new ProductResponseDto
-        {
-            Id = entity.Id,
-            Name = entity.Name,
-            Description = entity.Description,
-            Category = entity.Category,
-            ImageUri = entity.ImageUri,
-            Price = entity.Price,
-            Stock = entity.Stock,
-            CreatedAt = entity.CreatedAt,
-            UpdatedAt = entity.UpdatedAt
-        };
-    }
+    
 }

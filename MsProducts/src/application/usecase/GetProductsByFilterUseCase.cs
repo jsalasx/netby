@@ -1,6 +1,7 @@
 using MsProducts.Application.Models;
 using MsProducts.Domain.Entities;
 using MsProducts.Domain.Ports;
+using MsProducts.Infrastructure.Mappers;
 
 namespace MsProducts.Application.UseCase;
 
@@ -13,8 +14,16 @@ public class GetProductsByFilterUseCase
         _productRepository = productRepository;
     }
 
-    public async Task<IEnumerable<ProductEntity>> Execute(ProductFilterRequestDto filter, CancellationToken ct = default)
+    public async Task<ProductFilterResponseDto> Execute(ProductFilterRequestDto filter, CancellationToken ct = default)
     {
-        return await _productRepository.GetByFilterAsync(filter, ct);
+        var products = await _productRepository.GetByFilterAsync(filter, ct);
+        var count = await _productRepository.CountByFilterAsync(filter, ct);
+        return new ProductFilterResponseDto
+        {
+            Products = products.Select(ProductMapper.ToResponse),
+            TotalCount = count,
+            Page = filter.Page,
+            PageSize = filter.PageSize
+        };
     }
 }
