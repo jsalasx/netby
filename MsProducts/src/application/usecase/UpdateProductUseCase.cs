@@ -12,7 +12,7 @@ public class UpdateProductUseCase
         _productRepository = productRepository;
     }
 
-    public async Task Execute(ProductEntity product, CancellationToken ct = default)
+    public async Task<ProductEntity?> Execute(ProductEntity product, CancellationToken ct = default)
     {
         // Validaciones de negocio
         if (product.Id == Guid.Empty)
@@ -27,17 +27,9 @@ public class UpdateProductUseCase
         if (product.Stock < 0)
             throw new ArgumentException("Product stock cannot be negative", nameof(product.Stock));
 
-        // Verificar que el producto existe
-        var existingProduct = await _productRepository.GetByIdAsync(product.Id, ct);
-        if (existingProduct == null)
-            throw new InvalidOperationException($"Product with ID {product.Id} not found");
-
         // Actualizar la fecha de modificación
         product.UpdatedAt = DateTime.UtcNow;
-        
-        // Mantener la fecha de creación original
-        product.CreatedAt = existingProduct.CreatedAt;
 
-        await _productRepository.UpdateAsync(product, ct);
+        return await _productRepository.UpdateAsync(product, ct);
     }
 }

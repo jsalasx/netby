@@ -1,6 +1,64 @@
 @MsProducts_HostAddress = http://localhost:5138
 
-GET {{MsProducts_HostAddress}}/weatherforecast/
+### Get all products with filters (empty filter to get all)
+POST {{MsProducts_HostAddress}}/api/products/filter
+Content-Type: application/json
+
+{
+  "page": 1,
+  "pageSize": 10
+}
+
+### Create a new product
+POST {{MsProducts_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 15",
+  "description": "Latest Apple smartphone",
+  "category": "Electronics",
+  "imageUri": "https://example.com/iphone15.jpg",
+  "price": 999,
+  "stock": 50
+}
+
+### Get product by ID (replace with actual ID)
+GET {{MsProducts_HostAddress}}/api/products/{{productId}}
 Accept: application/json
 
-###
+### Update product (replace with actual ID)
+PUT {{MsProducts_HostAddress}}/api/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro",
+  "description": "Latest Apple smartphone Pro version",
+  "category": "Electronics",
+  "imageUri": "https://example.com/iphone15pro.jpg",
+  "price": 1199,
+  "stock": 30
+}
+
+### Delete product (replace with actual ID)
+DELETE {{MsProducts_HostAddress}}/api/products/{{productId}}
+
+### Filter products by category
+POST {{MsProducts_HostAddress}}/api/products/filter
+Content-Type: application/json
+
+{
+  "category": "Electronics",
+  "page": 1,
+  "pageSize": 10
+}
+
+### Filter products by price range
+POST {{MsProducts_HostAddress}}/api/products/filter
+Content-Type: application/json
+
+{
+  "priceGreaterThanEqual": 500,
+  "priceLessThan": 1500,
+  "page": 1,
+  "pageSize": 10
+}

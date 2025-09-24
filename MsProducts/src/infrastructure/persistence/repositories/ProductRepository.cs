@@ -54,10 +54,23 @@ public class ProductRepository : IProductRepository
         await _db.SaveChangesAsync(ct);
     }
 
-    public async Task UpdateAsync(ProductEntity product, CancellationToken ct)
+    public async Task<ProductEntity?> UpdateAsync(ProductEntity product, CancellationToken ct)
     {
-        _db.Products.Update(product);
+        var existing = await _db.Products.FirstOrDefaultAsync(p => p.Id == product.Id, ct);
+        if (existing is null)
+            throw new InvalidOperationException($"Product with Id {product.Id} not found");
+
+        // Actualizar propiedades
+        existing.Name = product.Name;
+        existing.Description = product.Description;
+        existing.Category = product.Category;
+        existing.ImageUri = product.ImageUri;
+        existing.Price = product.Price;
+        existing.Stock = product.Stock;
+        existing.UpdatedAt = DateTime.UtcNow;
+
         await _db.SaveChangesAsync(ct);
+        return existing;
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken ct)
