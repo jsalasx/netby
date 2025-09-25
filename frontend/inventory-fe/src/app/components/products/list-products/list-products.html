@@ -1,32 +1,52 @@
-<p>list-products works!</p>
+<div class="flex mb-3 gap-4 justify-center">
+  <p-button label="Cargar" (click)="onLoadProducts()" />
+  <app-save-product (saved)="onProductSaved()"></app-save-product>
+  <app-edit-product
+    (onCloseDialog)="onCloseEdit()"
+    (saved)="onProductSaved()"
+    [product]="selectedProduct()"
+    [onClickEdit]="onClickEdit()"
+  ></app-edit-product>
+</div>
 
+<div>
+  <app-filter-product (filterToFetch)="onFilterProducts($event)"></app-filter-product>
+</div>
 
-<p-button label="Cargar" (click)="onLoadProducts()" />
-<app-save-product (saved)="onProductSaved()"></app-save-product>
-<app-edit-product (onCloseDialog)="onCloseEdit()" (saved)="onProductSaved()" [product]="selectedProduct()" [onClickEdit]="onClickEdit()"></app-edit-product>
-
-<p-contextmenu #cm [model]="menuItems" (onHide)="selectedProduct.set(undefined)"  />
-<p-table [value]="products()" [(contextMenuSelection)]="selectedProduct" [contextMenu]="cm" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }" selectionMode="single">
-    <ng-template #header>
-        <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-        </tr>
-    </ng-template>
-    <ng-template #body let-product>
-        <tr  class="cursor-pointer" (dblclick)="onEditProduct(product)" [pSelectableRow]="product"  [pContextMenuRow]="product">
-            <td>{{ product.id }}</td>
-            <td>{{ product.code }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.category }}</td>
-            <td>{{ product.price | priceFormat }}</td>
-            <td>{{ product.stock }}</td>
-        </tr>
-    </ng-template>
+<p-contextmenu #cm [model]="menuItems" (onHide)="selectedProduct.set(undefined)" />
+<p-table
+  [value]="products()"
+  [(contextMenuSelection)]="selectedProduct"
+  [contextMenu]="cm"
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  selectionMode="single"
+>
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Stock</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-product>
+    <tr
+      class="cursor-pointer"
+      (dblclick)="onEditProduct(product)"
+      [pSelectableRow]="product"
+      [pContextMenuRow]="product"
+    >
+      <td>{{ product.id }}</td>
+      <td>{{ product.code }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.price | priceFormat }}</td>
+      <td>{{ product.stock }}</td>
+    </tr>
+  </ng-template>
 </p-table>
 <p-toast></p-toast>
 <p-confirmdialog />

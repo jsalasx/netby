@@ -5,11 +5,14 @@ import { inject, Injectable } from '@angular/core';
 export interface FilterProductsRequestDto {
   id?: string;
   name?: string;
+  code?: string;
   category?: string;
   priceGreaterThanEqual?: number;
   priceLessThanEqual?: number;
+  priceEqual?: number;
   stockGreaterThanEqual?: number;
   stockLessThanEqual?: number;
+  stockEqual?: number;
   page: number;
   size: number;
 }

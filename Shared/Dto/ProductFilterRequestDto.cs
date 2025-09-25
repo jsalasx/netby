@@ -4,11 +4,14 @@ public class ProductFilterRequestDto
 {
     public Guid? Id { get; set; }
     public string? Name { get; set; }
+    public string? Code { get; set; }
     public string? Category { get; set; }
     public int? PriceGreaterThanEqual { get; set; }
+    public int? PriceEqual { get; set; }
     public int? PriceLessThan { get; set; }
     public int? StockGreaterThanEqual { get; set; }
     public int? StockLessThan { get; set; }
+    public int? StockEqual { get; set; }
 
     // 🔹 Paginación
     public int Page { get; set; } = 1;      // Página actual

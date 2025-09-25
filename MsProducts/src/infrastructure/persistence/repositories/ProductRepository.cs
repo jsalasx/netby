@@ -26,14 +26,23 @@ public class ProductRepository : IProductRepository
         if (!string.IsNullOrEmpty(filter.Name))
             query = query.Where(p => p.Name.Contains(filter.Name));
 
+        if (!string.IsNullOrEmpty(filter.Code))
+            query = query.Where(p => p.Code.Contains(filter.Code));
+
         if (!string.IsNullOrEmpty(filter.Category))
             query = query.Where(p => p.Category == filter.Category);
+
+        if (filter.PriceEqual.HasValue)
+            query = query.Where(p => p.Price == filter.PriceEqual.Value);
 
         if (filter.PriceGreaterThanEqual.HasValue)
             query = query.Where(p => p.Price >= filter.PriceGreaterThanEqual.Value);
 
         if (filter.PriceLessThan.HasValue)
             query = query.Where(p => p.Price < filter.PriceLessThan.Value);
+
+        if (filter.StockEqual.HasValue)
+            query = query.Where(p => p.Stock == filter.StockEqual.Value);
 
         if (filter.StockGreaterThanEqual.HasValue)
             query = query.Where(p => p.Stock >= filter.StockGreaterThanEqual.Value);
@@ -55,15 +64,24 @@ public class ProductRepository : IProductRepository
 
         if (!string.IsNullOrEmpty(filter.Name))
             query = query.Where(p => p.Name.Contains(filter.Name));
+            
+        if (!string.IsNullOrEmpty(filter.Code))
+            query = query.Where(p => p.Code.Contains(filter.Code));
 
         if (!string.IsNullOrEmpty(filter.Category))
             query = query.Where(p => p.Category == filter.Category);
+
+        if (filter.PriceEqual.HasValue)
+            query = query.Where(p => p.Price == filter.PriceEqual.Value);
 
         if (filter.PriceGreaterThanEqual.HasValue)
             query = query.Where(p => p.Price >= filter.PriceGreaterThanEqual.Value);
 
         if (filter.PriceLessThan.HasValue)
             query = query.Where(p => p.Price < filter.PriceLessThan.Value);
+
+        if (filter.StockEqual.HasValue)
+            query = query.Where(p => p.Stock == filter.StockEqual.Value);
 
         if (filter.StockGreaterThanEqual.HasValue)
             query = query.Where(p => p.Stock >= filter.StockGreaterThanEqual.Value);

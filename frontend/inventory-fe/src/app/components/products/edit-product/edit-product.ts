@@ -1,6 +1,6 @@
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ProductDto, ProductService, SaveProductRequestDto, UpdateProductRequestDto } from '@app/services/products/product-service';
+import { ProductDto, ProductService, UpdateProductRequestDto } from '@app/services/products/product-service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';

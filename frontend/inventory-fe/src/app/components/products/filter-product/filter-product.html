@@ -1,0 +1,110 @@
+<form
+  [formGroup]="productFilterForm"
+  (ngSubmit)="onFilter()"
+  class="bg-white p-6 rounded-lg shadow-md"
+>
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <!-- Id -->
+    <div class="flex items-center gap-4">
+      <label for="id" class="font-semibold w-32">Id</label>
+      <input pInputText id="id" class="flex-auto" formControlName="id" />
+    </div>
+
+    <!-- Nombre -->
+    <div class="flex items-center gap-4">
+      <label for="name" class="font-semibold w-32">Nombre</label>
+      <input pInputText id="name" class="flex-auto" formControlName="name" />
+    </div>
+
+    <!-- Código -->
+    <div class="flex items-center gap-4">
+      <label for="code" class="font-semibold w-32">Código</label>
+      <input pInputText id="code" class="flex-auto" formControlName="code" />
+    </div>
+
+    <!-- Categoría -->
+    <div class="flex items-center gap-4">
+      <label for="category" class="font-semibold w-32">Categoría</label>
+      <input pInputText id="category" class="flex-auto" formControlName="category" />
+    </div>
+
+    <!-- Precios -->
+    <div>
+      <h3 class="font-semibold mb-2">Precio</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="flex items-center gap-4">
+          <label class="w-32">≥</label>
+          <p-inputNumber
+            formControlName="priceGreaterThanEqual"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-32">=</label>
+          <p-inputNumber
+            formControlName="priceEqual"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-32">&lt;</label>
+          <p-inputNumber
+            formControlName="priceLessThan"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Stock -->
+    <div>
+      <h3 class="font-semibold mb-2">Stock</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="flex items-center gap-4">
+          <label class="w-32">≥</label>
+          <p-inputNumber
+            formControlName="stockGreaterThanEqual"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-32">=</label>
+          <p-inputNumber
+            formControlName="stockEqual"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-32">&lt;</label>
+          <p-inputNumber
+            formControlName="stockLessThan"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Botones -->
+  <div class="flex justify-end gap-4 mt-6">
+    <p-button type="button" label="Limpiar" (click)="onClear()" severity="secondary" />
+    <p-button type="submit" label="Filtrar" />
+  </div>
+</form>

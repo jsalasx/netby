@@ -13,6 +13,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { FilterProduct } from '../filter-product/filter-product';
 @Component({
   selector: 'app-list-products',
   imports: [
@@ -24,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
     ContextMenuModule,
     ToastModule,
     ConfirmDialog,
+    FilterProduct,
   ],
   templateUrl: './list-products.html',
   styleUrl: './list-products.css',
@@ -55,10 +57,17 @@ export class ListProducts {
     this.onClickEdit.set(false);
   }
 
-  onLoadProducts() {
+  cleanObject<T extends object>(obj: T): Partial<T> {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+    ) as Partial<T>;
+  }
+
+  onLoadProducts(filterAux?: any) {
     const filter: FilterProductsRequestDto = {
       page: 1,
       size: 10,
+      ...this.cleanObject(filterAux ?? {})
     };
     this.productService.getFilteredProducts(filter).subscribe((products) => {
       console.log(products);
@@ -89,38 +98,46 @@ export class ListProducts {
   onDeleteProduct(product: ProductDto) {
     console.log('Delete product', product);
     this.confirmDelete(product);
+  }
 
+  onFilterProducts(filter: any) {
+    console.log('Filter products', filter);
+    this.onLoadProducts(filter);
   }
 
   confirmDelete(product: ProductDto) {
-        this.confirmationService.confirm({
-            message: 'Are you sure that you want to proceed?',
-            header: 'Confirmation',
-            closable: true,
-            closeOnEscape: true,
-            icon: 'pi pi-exclamation-triangle',
-            rejectButtonProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true,
-            },
-            acceptButtonProps: {
-                label: 'Save',
-            },
-            accept: () => {
-                this.productService.DeleteProduct(product.id).subscribe(() => {
-                    this.products.set(this.products().filter((p) => p.id !== product.id));
-                    this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-                });
-            },
-            reject: () => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Rejected',
-                    detail: 'You have rejected',
-                    life: 3000,
-                });
-            },
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Save',
+      },
+      accept: () => {
+        this.productService.DeleteProduct(product.id).subscribe(() => {
+          this.products.set(this.products().filter((p) => p.id !== product.id));
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Confirmed',
+            detail: 'You have accepted',
+          });
         });
-    }
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'You have rejected',
+          life: 3000,
+        });
+      },
+    });
+  }
 }
