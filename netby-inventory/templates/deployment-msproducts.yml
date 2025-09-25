@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: netby-inventory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-products
+  namespace: netby-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-products
+  template:
+    metadata:
+      labels:
+        app: ms-products
+    spec:
+      containers:
+      - name: ms-products
+        image: ms-products:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5138
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        envFrom:
+        - configMapRef:
+            name: ms-products-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-products-service
+  namespace: netby-inventory
+spec:
+  selector:
+    app: ms-products
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80 # Puerto dentro del cluster
+    targetPort: 5138 # Puerto del contenedor (FastAPI)
+  type: ClusterIP # Exponer el servicio al exterior
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-products-config
+  namespace: netby-inventory
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  DB_CONNECTION: "Server=mssql.default.svc.cluster.local,1433;Database=Products;User Id=sa;Password=StrongP@ssw0rd123!;TrustServerCertificate=True;"
+  REDIS_CONNECTION: "my-redis-master.default.svc.cluster.local:6379"

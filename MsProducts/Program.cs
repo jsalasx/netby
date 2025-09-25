@@ -14,9 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+string? connString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 // Entity Framework
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connString ?? builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repository
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -28,6 +30,21 @@ builder.Services.AddScoped<GetProductsByFilterUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
 
+string? redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION");
+
+var multiplexers = new List<RedLockMultiplexer>
+{
+    ConnectionMultiplexer.Connect(redisConnectionString ?? "localhost:6379")
+};
+
+
+builder.Services.AddSingleton<RedLockFactory>(_ =>
+{
+    return RedLockFactory.Create(multiplexers);
+});
+
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -35,16 +52,6 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 }
-
-var multiplexers = new List<RedLockMultiplexer>
-{
-    ConnectionMultiplexer.Connect("localhost:6379") // cámbialo por tu Redis
-};
-
-builder.Services.AddSingleton<RedLockFactory>(_ =>
-{
-    return RedLockFactory.Create(multiplexers);
-});
 
 
 

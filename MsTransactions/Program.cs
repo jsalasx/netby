@@ -1,19 +1,45 @@
 using MsTransactions.Infrastructure.Adapters;
+using Microsoft.EntityFrameworkCore;
+using MsTransactions.Infrastructure.Persistence;
+using MsTransactions.Infrastructure.Persistence.Repositories;
+using MsTransactions.Domain.Port;
+using MsTransactions.Application.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+string? connString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+// Entity Framework
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connString ?? builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+// Use Cases
+builder.Services.AddScoped<AddTransactionUseCase>();
+builder.Services.AddScoped<GetTransactionByIdUseCase>();
+builder.Services.AddScoped<GetTransactionByFilterUseCase>();
+builder.Services.AddScoped<DeleteTransactionUseCase>();
+
+string? productsApiUrl = Environment.GetEnvironmentVariable("URL_PRODUCTS_API");
 builder.Services.AddHttpClient<ProductApiClient>(client =>
 {
-    client.BaseAddress = new Uri("http://msproducts/"); // URL base del micro de productos
+    client.BaseAddress = new Uri(productsApiUrl ?? "http://msproducts"); // URL base del micro de productos
 });
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,29 +50,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// Map controllers
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

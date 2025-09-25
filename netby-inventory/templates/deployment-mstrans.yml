@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: netby-inventory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-transactions
+  namespace: netby-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-transactions
+  template:
+    metadata:
+      labels:
+        app: ms-transactions
+    spec:
+      containers:
+      - name: ms-transactions
+        image: ms-transactions:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5138
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        envFrom:
+        - configMapRef:
+            name: ms-transactions-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-transactions-service
+  namespace: netby-inventory
+spec:
+  selector:
+    app: ms-transactions
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80 # Puerto dentro del cluster
+    targetPort: 5138 # Puerto del contenedor (FastAPI)
+  type: ClusterIP # Exponer el servicio al exterior
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-transactions-config
+  namespace: netby-inventory
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  DB_CONNECTION: "Server=mssql.default.svc.cluster.local,1433;Database=Transactions;User Id=sa;Password=StrongP@ssw0rd123!;TrustServerCertificate=True;"
+  URL_PRODUCTS_API: "http://ms-products-service"

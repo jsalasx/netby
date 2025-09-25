@@ -15,7 +15,7 @@ public class ProductApiClient
         CancellationToken ct = default)
     {
         // POST JSON al endpoint
-        var response = await _http.PostAsJsonAsync("api/stock/update/batch", request, ct);
+        var response = await _http.PostAsJsonAsync("/api/stock/update/batch", request, ct);
 
         if (!response.IsSuccessStatusCode)
         {
