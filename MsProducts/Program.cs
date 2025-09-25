@@ -8,11 +8,23 @@ using StackExchange.Redis;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:4200") // URL de tu frontend Angular
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 
 string? connString = Environment.GetEnvironmentVariable("DB_CONNECTION");
@@ -64,7 +76,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(myAllowSpecificOrigins);
 // Map controllers
 app.MapControllers();
 

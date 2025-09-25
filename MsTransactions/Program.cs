@@ -6,6 +6,7 @@ using MsTransactions.Domain.Port;
 using MsTransactions.Application.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -13,6 +14,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        policy  =>
+        {
+            policy.WithOrigins("*") // URL de tu frontend Angular
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 string? connString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 // Entity Framework

@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { FilterProductsRequestDto, ProductDto, ProductService } from '@app/services/products/product-service';
 import {  ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { SaveProduct } from "../save-product/save-product";
 @Component({
   selector: 'app-list-products',
-  imports: [ButtonModule, TableModule],
+  imports: [ButtonModule, TableModule, SaveProduct],
   templateUrl: './list-products.html',
-  styleUrl: './list-products.scss'
+  styleUrl: './list-products.css'
 })
 export class ListProducts {
 

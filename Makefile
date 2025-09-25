@@ -8,14 +8,14 @@ build-msproducts:
 restart-msproducts:
 	kubectl rollout restart deployment ms-products -n netby-inventory	
 
-deploy-msproducts: build-msproducts restart-msproducts
+dp: build-msproducts restart-msproducts
 	
 
 build-mstransactions:
 	docker build -t mstransactions:latest -f MsTransactions/Dockerfile .
 restart-mstransactions:
 	kubectl rollout restart deployment ms-transactions -n netby-inventory
-deploy-mstransactions: build-mstransactions restart-mstransactions
+dt: build-mstransactions restart-mstransactions
 
 helm-install:
 	helm install netby-inventory ./netby-inventory --namespace netby-inventory --create-namespace

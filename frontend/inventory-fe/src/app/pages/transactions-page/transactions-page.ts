@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-transactions-page',
   imports: [],
   templateUrl: './transactions-page.html',
-  styleUrl: './transactions-page.scss'
+  styleUrl: './transactions-page.css'
 })
 export class TransactionsPage {
 
