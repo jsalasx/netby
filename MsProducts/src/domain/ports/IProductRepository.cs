@@ -1,5 +1,6 @@
 using MsProducts.Domain.Entities;
 using Shared.Dto;
+
 namespace MsProducts.Domain.Ports;
 
 public interface IProductRepository
@@ -11,4 +12,5 @@ public interface IProductRepository
     Task AddAsync(ProductEntity product, CancellationToken ct);
     Task<ProductEntity?> UpdateAsync(ProductEntity product, CancellationToken ct);
     Task DeleteAsync(Guid id, CancellationToken ct);
+    Task<UpdateStockRepositoryResponse> UpdateStockAsync(Guid productId, int quantity, CancellationToken ct);
 }

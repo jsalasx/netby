@@ -31,7 +31,7 @@ public class TransactionRepository : ITransactionRepository
         var transaction = await _context.Transactions.FindAsync(new object[] { id }, ct);
         if (transaction != null)
         {
-            _context.Transactions.Remove(transaction);
+            transaction.isDeleted = true;
             await _context.SaveChangesAsync(ct);
         }
     }
@@ -48,14 +48,14 @@ public class TransactionRepository : ITransactionRepository
     public async Task<TransactionEntity?> GetByIdAsync(Guid id, CancellationToken ct)
     {
         return await _context.Transactions
-            .Include(t => t.details)
+            .Include(t => t.Details)
             .FirstOrDefaultAsync(t => t.Id == id, ct);
     }
 
     public async Task<TransactionEntity?> UpdateAsync(TransactionEntity transaction, CancellationToken ct)
     {
         var existingTransaction = await _context.Transactions
-            .Include(t => t.details)
+            .Include(t => t.Details)
             .FirstOrDefaultAsync(t => t.Id == transaction.Id, ct);
 
         if (existingTransaction is null)
@@ -64,7 +64,7 @@ public class TransactionRepository : ITransactionRepository
         existingTransaction.Type = transaction.Type;
         existingTransaction.TotalAmount = transaction.TotalAmount;
         existingTransaction.UpdatedAt = DateTime.UtcNow;
-        existingTransaction.details = transaction.details;
+        existingTransaction.Details = transaction.Details;
 
 
         await _context.SaveChangesAsync(ct);
@@ -74,7 +74,7 @@ public class TransactionRepository : ITransactionRepository
     private IQueryable<TransactionEntity> ApplyFilter(IQueryable<TransactionEntity> query, TransactionFilterRequestDto filter, bool includeDetails)
     {
         if (includeDetails)
-            query = query.Include(t => t.details);
+            query = query.Include(t => t.Details);
 
         if (filter.Id.HasValue)
             query = query.Where(t => t.Id == filter.Id.Value);
@@ -83,7 +83,7 @@ public class TransactionRepository : ITransactionRepository
             query = query.Where(t => t.Type == filter.Type.Value);
 
         if (filter.ProductIds != null && filter.ProductIds.Any())
-            query = query.Where(t => t.details.Any(d => filter.ProductIds.Contains(d.ProductId)));
+            query = query.Where(t => t.Details.Any(d => filter.ProductIds.Contains(d.ProductId)));
 
         if (filter.TotalAmountGreaterThanEqual.HasValue)
             query = query.Where(t => t.TotalAmount >= filter.TotalAmountGreaterThanEqual.Value);

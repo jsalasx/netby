@@ -110,4 +110,21 @@ public class ProductRepository : IProductRepository
             await _db.SaveChangesAsync(ct);
         }
     }
+
+    public async Task<UpdateStockRepositoryResponse> UpdateStockAsync(Guid productId, int quantity, CancellationToken ct)
+{
+    var product = await _db.Products.FindAsync(new object[] { productId }, ct);
+
+    if (product == null)
+        return new UpdateStockRepositoryResponse { Success = false, ProductName= "", Message = "Product not found" };
+
+    product.Stock += quantity;
+
+    if (product.Stock < 0)
+        return new UpdateStockRepositoryResponse { Success = false, ProductName= product.Name, Message = "Insufficient stock" };
+
+    await _db.SaveChangesAsync(ct);
+
+    return new UpdateStockRepositoryResponse { Success = true, ProductName= product.Name, Message = "Stock updated successfully" };
+}
 }

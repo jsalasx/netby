@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using MsProducts.Application.UseCase;
 using MsProducts.Domain.Ports;
 using MsProducts.Infrastructure.Persistence;
+using RedLockNet.SERedis;
+using RedLockNet.SERedis.Configuration;
+using StackExchange.Redis;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,17 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 }
+
+var multiplexers = new List<RedLockMultiplexer>
+{
+    ConnectionMultiplexer.Connect("localhost:6379") // cámbialo por tu Redis
+};
+
+builder.Services.AddSingleton<RedLockFactory>(_ =>
+{
+    return RedLockFactory.Create(multiplexers);
+});
+
 
 
 // Configure the HTTP request pipeline.

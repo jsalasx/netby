@@ -8,6 +8,8 @@ public class CreateTransactionRequestDto
     public List<TransactionDetailRequestDto> Details { get; set; } = new List<TransactionDetailRequestDto>();
 
     public int TotalAmount { get; set; }
+
+    public string Coment { get; set; } = string.Empty;
 }
 
 public class TransactionDetailRequestDto
@@ -24,6 +26,7 @@ public class UpdateTransactionRequestDto
     public TransactionTypeEnum? Type { get; set; }
     public List<TransactionDetailRequestDto> Details { get; set; } = new List<TransactionDetailRequestDto>();
 
+    public string Coment { get; set; } = string.Empty;
     public int TotalAmount { get; set; }
 
 }
@@ -34,6 +37,8 @@ public class TransactionResponseDto
     public TransactionTypeEnum Type { get; set; }
     public List<TransactionDetailResponseDto> Details { get; set; } = new List<TransactionDetailResponseDto>();
     public int TotalAmount { get; set; }
+
+    public string Coment { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
