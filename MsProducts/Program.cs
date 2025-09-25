@@ -29,6 +29,7 @@ builder.Services.AddScoped<GetProductByIdUseCase>();
 builder.Services.AddScoped<GetProductsByFilterUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
+builder.Services.AddScoped<UpdateStockUseCase>();
 
 string? redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION");
 

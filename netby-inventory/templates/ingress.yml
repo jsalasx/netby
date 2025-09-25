@@ -21,7 +21,7 @@ spec:
             name: ms-products-service
             port:
               number: 80
-      - path: "/api/transactions"
+      - path: "/api/transaction"
         pathType: ImplementationSpecific
         backend:
           service:
