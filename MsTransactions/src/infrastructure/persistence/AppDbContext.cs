@@ -29,6 +29,12 @@ public class AppDbContext : DbContext
             entity.Property(e => e.TotalAmount)
                 .HasColumnType("int");
 
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false);
+                
+            entity.Property(e => e.Coment)
+                .HasColumnType("nvarchar(max)");   
+
 
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime2")
@@ -39,7 +45,7 @@ public class AppDbContext : DbContext
                 .HasDefaultValueSql("GETUTCDATE()"); // inicial, luego lo manejas al actualizar
 
             // Relación uno-a-muchos con TransactionDetailEntity
-            entity.HasMany(e => e.Detalles)
+            entity.HasMany(e => e.Details)
                   .WithOne(d => d.Transaction)
                   .HasForeignKey(d => d.TransactionId)
                   .OnDelete(DeleteBehavior.Cascade); // Si se elimina una transacción, eliminar sus detalles

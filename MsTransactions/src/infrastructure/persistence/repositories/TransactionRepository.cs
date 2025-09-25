@@ -31,7 +31,7 @@ public class TransactionRepository : ITransactionRepository
         var transaction = await _context.Transactions.FindAsync(new object[] { id }, ct);
         if (transaction != null)
         {
-            transaction.isDeleted = true;
+            transaction.IsDeleted = true;
             await _context.SaveChangesAsync(ct);
         }
     }
