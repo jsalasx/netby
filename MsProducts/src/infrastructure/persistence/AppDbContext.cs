@@ -13,46 +13,57 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<ProductEntity>(entity =>
     {
-        // Nombre de la tabla
-        entity.ToTable("Products");
+          // Nombre de la tabla
+          entity.ToTable("Products");
 
-        // Clave primaria
-        entity.HasKey(e => e.Id);
+          // Clave primaria
+          entity.HasKey(e => e.Id);
 
-        // Propiedades
-        entity.Property(e => e.Name)
-              .IsRequired()
-              .HasMaxLength(150);
+          entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false);
 
-        entity.Property(e => e.Description)
-              .HasMaxLength(500);
+          // Propiedades
+          entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(150);
 
-        entity.Property(e => e.Category)
-              .HasMaxLength(100);
+          entity.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(50);
 
-        entity.Property(e => e.ImageUri)
-              .HasMaxLength(300);
+          entity.Property(e => e.Description)
+                .HasMaxLength(500);
 
-        entity.Property(e => e.Price)
-              .HasColumnType("int"); // podrías usar decimal(18,2) si manejas centavos
+          entity.Property(e => e.Category)
+                .HasMaxLength(100);
 
-        entity.Property(e => e.Stock)
-              .HasDefaultValue(0); // valor por defecto
+          entity.Property(e => e.ImageUri)
+                .HasMaxLength(300);
 
-        entity.Property(e => e.CreatedAt)
-              .HasColumnType("datetime2")
-              .HasDefaultValueSql("GETUTCDATE()"); // valor default generado por SQL
+          entity.Property(e => e.Price)
+                .HasColumnType("int"); // podrías usar decimal(18,2) si manejas centavos
 
-        entity.Property(e => e.UpdatedAt)
-              .HasColumnType("datetime2")
-              .HasDefaultValueSql("GETUTCDATE()"); // inicial, luego lo manejas al actualizar
+          entity.Property(e => e.Stock)
+                .HasDefaultValue(0); // valor por defecto
 
-        // Índices
-        entity.HasIndex(e => e.Name)
-              .HasDatabaseName("IX_Products_Name");
+          entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime2")
+                .HasDefaultValueSql("GETUTCDATE()"); // valor default generado por SQL
 
-        entity.HasIndex(e => e.Category)
-              .HasDatabaseName("IX_Products_Category");
+          entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime2")
+                .HasDefaultValueSql("GETUTCDATE()"); // inicial, luego lo manejas al actualizar
+
+          // Índices
+          entity.HasIndex(e => e.Name)
+                .HasDatabaseName("IX_Products_Name");
+
+          entity.HasIndex(e => e.Category)
+                .HasDatabaseName("IX_Products_Category");
+
+          entity.HasIndex(e => e.Code)
+                .IsUnique()
+                 .HasDatabaseName("UX_Products_Code");
     });
     }
 }

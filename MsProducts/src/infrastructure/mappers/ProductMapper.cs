@@ -11,6 +11,7 @@ public static class ProductMapper
         {
             Name = dto.Name,
             Description = dto.Description,
+            Code = dto.Code,
             Category = dto.Category,
             ImageUri = dto.ImageUri,
             Price = dto.Price,
@@ -30,7 +31,6 @@ public static class ProductMapper
             Category = dto.Category,
             ImageUri = dto.ImageUri,
             Price = dto.Price,
-            Stock = dto.Stock,
             UpdatedAt = DateTime.UtcNow
         };
     }
@@ -41,6 +41,7 @@ public static class ProductMapper
         {
             Id = entity.Id,
             Name = entity.Name,
+            Code = entity.Code,
             Description = entity.Description,
             Category = entity.Category,
             ImageUri = entity.ImageUri,

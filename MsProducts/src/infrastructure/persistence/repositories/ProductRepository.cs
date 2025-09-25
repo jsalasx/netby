@@ -41,6 +41,8 @@ public class ProductRepository : IProductRepository
         if (filter.StockLessThan.HasValue)
             query = query.Where(p => p.Stock < filter.StockLessThan.Value);
 
+        query = query.Where(p => !p.IsDeleted);
+
         return await query.LongCountAsync(ct);
     }
 
@@ -69,6 +71,9 @@ public class ProductRepository : IProductRepository
         if (filter.StockLessThan.HasValue)
             query = query.Where(p => p.Stock < filter.StockLessThan.Value);
 
+        query = query.Where(p => !p.IsDeleted);
+        query = query.OrderByDescending(p => p.UpdatedAt);
+
         // Aplicar paginación
         int skip = (filter.Page - 1) * filter.PageSize;
         query = query.Skip(skip).Take(filter.PageSize);
@@ -94,7 +99,6 @@ public class ProductRepository : IProductRepository
         existing.Category = product.Category;
         existing.ImageUri = product.ImageUri;
         existing.Price = product.Price;
-        existing.Stock = product.Stock;
         existing.UpdatedAt = DateTime.UtcNow;
 
         await _db.SaveChangesAsync(ct);
@@ -106,7 +110,8 @@ public class ProductRepository : IProductRepository
         var product = await _db.Products.FindAsync(new object[] { id }, ct);
         if (product != null)
         {
-            _db.Products.Remove(product);
+            product.IsDeleted = true;
+            product.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync(ct);
         }
     }

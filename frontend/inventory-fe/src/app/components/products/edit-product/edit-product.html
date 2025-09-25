@@ -1,5 +1,3 @@
-<p-button (click)="showDialog()" label="Nuevo producto" />
-
 <p-dialog
   header="Guardar Producto"
   [modal]="true"
@@ -14,18 +12,6 @@
       <input pInputText id="name" class="flex-auto" required formControlName="name" />
     </div>
 
-    <!-- Código -->
-    <div class="flex items-start gap-4">
-      <label for="code" class="font-semibold w-32 pt-2">Código *</label>
-      <textarea
-        pInputTextarea
-        id="code"
-        rows="3"
-        class="flex-auto"
-        formControlName="code"
-        name="code"
-      ></textarea>
-    </div>
 
     <!-- Categoría -->
     <div class="flex items-center gap-4">
@@ -81,18 +67,7 @@
         />
       </div>
 
-      <div class="flex items-center gap-4">
-        <label for="stock" class="font-semibold w-32">Stock *</label>
-        <p-inputNumber
-          inputId="stock"
-          class="flex-auto w-full"
-          formControlName="stock"
-          name="stock"
-          [min]="0"
-          [useGrouping]="false"
-          mode="decimal"
-        />
-      </div>
+
     </div>
 
     <!-- Botones -->

@@ -1,3 +1,4 @@
+import { SaveProduct } from './../../components/products/save-product/save-product';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -28,8 +29,27 @@ export interface ProductDto {
   imageUri: string;
   price: number;
   stock: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SaveProductRequestDto {
+  name: string;
+  category: string;
+  code: string;
+  description: string;
+  imageUri: string;
+  price: number;
+  stock: number;
+}
+
+export interface UpdateProductRequestDto  {
+  id: string
+  name: string;
+  category: string;
+  description: string;
+  imageUri: string;
+  price: number;
 }
 
 @Injectable({
@@ -45,6 +65,18 @@ export class ProductService {
 
   getFilteredProducts(filter: FilterProductsRequestDto) {
     return this.http.post<ProductResponseDto>(`${this.baseUrl}/filter`, filter);
+  }
+
+  SaveProduct(req : SaveProductRequestDto) {
+    return this.http.post<ProductDto>(`${this.baseUrl}`, req);
+  }
+
+  UpdateProduct(req: UpdateProductRequestDto) {
+    return this.http.put<ProductDto>(`${this.baseUrl}/${req.id}`, req);
+  }
+
+  DeleteProduct(id: string) {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
 }

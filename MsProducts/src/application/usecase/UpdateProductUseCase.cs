@@ -24,12 +24,7 @@ public class UpdateProductUseCase
         if (product.Price < 0)
             throw new ArgumentException("Product price cannot be negative", nameof(product.Price));
 
-        if (product.Stock < 0)
-            throw new ArgumentException("Product stock cannot be negative", nameof(product.Stock));
-
-        // Actualizar la fecha de modificación
-        product.UpdatedAt = DateTime.UtcNow;
-
+        
         return await _productRepository.UpdateAsync(product, ct);
     }
 }
