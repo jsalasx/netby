@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MsProducts.Domain.Entities;
-using MsProducts.Application.Models;
 using MsProducts.Application.UseCase;
 using MsProducts.Infrastructure.Mappers;
-
+using Shared.Dto;
 
 
 namespace MsProducts.Api.Controllers;

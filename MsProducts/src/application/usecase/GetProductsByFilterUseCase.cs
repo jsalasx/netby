@@ -1,8 +1,6 @@
-using MsProducts.Application.Models;
-using MsProducts.Domain.Entities;
 using MsProducts.Domain.Ports;
 using MsProducts.Infrastructure.Mappers;
-
+using Shared.Dto;
 namespace MsProducts.Application.UseCase;
 
 public class GetProductsByFilterUseCase

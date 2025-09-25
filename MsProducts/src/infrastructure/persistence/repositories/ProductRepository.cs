@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MsProducts.Application.Models;
 using MsProducts.Domain.Entities;
 using MsProducts.Domain.Ports;
+using Shared.Dto;
 
 namespace MsProducts.Infrastructure.Persistence;
 

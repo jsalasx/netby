@@ -1,4 +1,4 @@
-namespace MsTransactions.Domain.Enums;
+namespace Shared.Enums;
 
 public enum TransactionTypeEnum
 {

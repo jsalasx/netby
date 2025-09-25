@@ -1,6 +1,5 @@
-using MsProducts.Application.Models;
 using MsProducts.Domain.Entities;
-
+using Shared.Dto;
 namespace MsProducts.Domain.Ports;
 
 public interface IProductRepository

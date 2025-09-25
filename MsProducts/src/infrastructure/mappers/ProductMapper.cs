@@ -1,5 +1,5 @@
 using MsProducts.Domain.Entities;
-using MsProducts.Application.Models;
+using Shared.Dto;
 
 namespace MsProducts.Infrastructure.Mappers;
 
