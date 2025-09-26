@@ -32,7 +32,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false);
                 
-            entity.Property(e => e.Coment)
+            entity.Property(e => e.Comment)
                 .HasColumnType("nvarchar(max)");   
 
 

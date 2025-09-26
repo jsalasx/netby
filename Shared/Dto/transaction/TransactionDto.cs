@@ -9,27 +9,29 @@ public class CreateTransactionRequestDto
 
     public int TotalAmount { get; set; }
 
-    public string Coment { get; set; } = string.Empty;
+    public string Comment { get; set; } = string.Empty;
 }
 
 public class TransactionDetailRequestDto
 {
     public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductCode { get; set; } = string.Empty; 
     public int Quantity { get; set; }
     public int UnitPrice { get; set; }
     public int Total { get; set; }
 }
 
-public class UpdateTransactionRequestDto
-{
-    public Guid Id { get; set; }
-    public TransactionTypeEnum? Type { get; set; }
-    public List<TransactionDetailRequestDto> Details { get; set; } = new List<TransactionDetailRequestDto>();
+// public class UpdateTransactionRequestDto
+// {
+//     public Guid Id { get; set; }
+//     public TransactionTypeEnum? Type { get; set; }
+//     public List<TransactionDetailRequestDto> Details { get; set; } = new List<TransactionDetailRequestDto>();
 
-    public string Coment { get; set; } = string.Empty;
-    public int TotalAmount { get; set; }
+//     public string Comment { get; set; } = string.Empty;
+//     public int TotalAmount { get; set; }
 
-}
+// }
 
 public class TransactionResponseDto
 {
@@ -38,7 +40,7 @@ public class TransactionResponseDto
     public List<TransactionDetailResponseDto> Details { get; set; } = new List<TransactionDetailResponseDto>();
     public int TotalAmount { get; set; }
 
-    public string Coment { get; set; } = string.Empty;
+    public string Comment { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
@@ -47,6 +49,9 @@ public class TransactionResponseDto
 public class TransactionDetailResponseDto
 {
     public Guid ProductId { get; set; }
+
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductCode { get; set; } = string.Empty; 
     public int Quantity { get; set; }
     public int UnitPrice { get; set; }
     public int Total { get; set; }

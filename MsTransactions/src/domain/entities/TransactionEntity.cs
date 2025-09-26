@@ -15,7 +15,7 @@ public class TransactionEntity
 
     public bool IsDeleted { get; set; } = false;
 
-    public string Coment { get; set; } = string.Empty;
+    public string Comment { get; set; } = string.Empty;
 
 
     public int GetDetailMultiplyTotalAmount()
@@ -37,7 +37,8 @@ public class TransactionEntity
                 ProductId = d.ProductId,
                 Quantity = -Math.Abs(d.Quantity)
             }).ToList();
-        } else if (Type == TransactionTypeEnum.Purchase)
+        }
+        else if (Type == TransactionTypeEnum.Purchase)
         {
             return Details.Select(d => new UpdateStockDtoRequest
             {
@@ -52,7 +53,8 @@ public class TransactionEntity
                 ProductId = d.ProductId,
                 Quantity = +Math.Abs(d.Quantity)
             }).ToList();
-        } else if (Type == TransactionTypeEnum.PurchaseReturn)
+        }
+        else if (Type == TransactionTypeEnum.PurchaseReturn)
         {
             return Details.Select(d => new UpdateStockDtoRequest
             {
@@ -81,6 +83,38 @@ public class TransactionEntity
             throw new Exception("Transaction type not supported for stock update");
         }
 
+    }
+
+    public void ChangeTypeByError()
+    { 
+        if (Type == TransactionTypeEnum.Sale)
+        {
+            Type = TransactionTypeEnum.Purchase;
+        }
+        else if (Type == TransactionTypeEnum.Purchase)
+        {
+            Type = TransactionTypeEnum.Sale;
+        }
+        else if (Type == TransactionTypeEnum.Return)
+        {
+            Type = TransactionTypeEnum.PurchaseReturn;
+        }
+        else if (Type == TransactionTypeEnum.PurchaseReturn)
+        {
+            Type = TransactionTypeEnum.Return;
+        }
+        else if (Type == TransactionTypeEnum.Purchase_Adjustment)
+        {
+            Type = TransactionTypeEnum.Sale_Adjustment;
+        }
+        else if (Type == TransactionTypeEnum.Sale_Adjustment)
+        {
+            Type = TransactionTypeEnum.Purchase_Adjustment;
+        }
+        else
+        {
+            throw new Exception("Transaction type not supported for stock update");
+        }
     }
 
 }

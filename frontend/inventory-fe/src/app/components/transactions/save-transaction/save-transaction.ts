@@ -182,6 +182,7 @@ export class SaveTransaction {
       )),
       this.transactionForm.value.comment || ""
     );
+
     transactionToSave.multiply100();
     transactionToSave.calculateTotal();
     console.log(transactionToSave);

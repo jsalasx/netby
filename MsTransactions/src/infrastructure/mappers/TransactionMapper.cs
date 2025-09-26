@@ -13,11 +13,13 @@ public static class TransactionMapper
             Details = entity.Details.Select(d => new TransactionDetailResponseDto
             {
                 ProductId = d.ProductId,
+                ProductName = d.ProductName,
+                ProductCode = d.ProductCode,
                 Quantity = d.Quantity,
                 UnitPrice = d.UnitPrice,
                 Total = d.Total
             }).ToList(),
-            Coment = entity.Coment,
+            Comment = entity.Comment,
             TotalAmount = entity.TotalAmount,
             CreatedAt = entity.CreatedAt,
             UpdatedAt = entity.UpdatedAt
@@ -38,30 +40,32 @@ public static class TransactionMapper
             Details = dto.Details.Select(d => new TransactionDetailEntity
             {
                 ProductId = d.ProductId,
+                ProductName = d.ProductName,
+                ProductCode = d.ProductCode,
                 Quantity = d.Quantity,
                 UnitPrice = d.UnitPrice,
                 Total = d.Total
             }).ToList(),
-            Coment = dto.Coment,
+            Comment = dto.Comment,
             TotalAmount = dto.TotalAmount,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
     }
 
-    public static void UpdateEntity(UpdateTransactionRequestDto dto, Guid id)
-    {
-        var entity = new TransactionEntity { Id = id };
-        entity.Type = dto.Type ?? entity.Type;
-        entity.Details = dto.Details.Select(d => new TransactionDetailEntity
-        {
-            ProductId = d.ProductId,
-            Quantity = d.Quantity,
-            UnitPrice = d.UnitPrice,
-            Total = d.Total
-        }).ToList();
-        entity.Coment = dto.Coment;
-        entity.TotalAmount = dto.TotalAmount;
-        entity.UpdatedAt = DateTime.UtcNow;
-    }
+    // public static void UpdateEntity(UpdateTransactionRequestDto dto, Guid id)
+    // {
+    //     var entity = new TransactionEntity { Id = id };
+    //     entity.Type = dto.Type ?? entity.Type;
+    //     entity.Details = dto.Details.Select(d => new TransactionDetailEntity
+    //     {
+    //         ProductId = d.ProductId,
+    //         Quantity = d.Quantity,
+    //         UnitPrice = d.UnitPrice,
+    //         Total = d.Total
+    //     }).ToList();
+    //     entity.Comment = dto.Comment;
+    //     entity.TotalAmount = dto.TotalAmount;
+    //     entity.UpdatedAt = DateTime.UtcNow;
+    // }
 }
