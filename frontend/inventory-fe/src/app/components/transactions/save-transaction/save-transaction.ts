@@ -34,7 +34,7 @@ import { TransactionServices } from '@app/services/transactions/transaction-serv
   providers: [MessageService]
 })
 export class SaveTransaction {
-  visible = signal(true);
+  visible = signal(false);
   transactionTypes = TransactionTypeOptions;
   selectedTransactionType: TransactionTypeOption | undefined = undefined;
   messageService = inject(MessageService);

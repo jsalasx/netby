@@ -1,4 +1,42 @@
 <p>list-transactions works!</p>
 
-
+<p-button label="Cargar" (click)="onLoadTransactions()" />
 <app-save-transaction></app-save-transaction>
+
+
+
+<p-contextmenu #cm [model]="menuItems" (onHide)="selectedTransaction.set(undefined)" />
+<p-table
+  [value]="transactions()"
+  [(contextMenuSelection)]="selectedTransaction"
+  [contextMenu]="cm"
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  selectionMode="single"
+>
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Total</th>
+      <th>Comentario</th>
+      <th>Fecha</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-transaction>
+    <tr
+      class="cursor-pointer"
+      (dblclick)="onGetTransaction(transaction)"
+      [pSelectableRow]="transaction"
+      [pContextMenuRow]="transaction"
+    >
+      <td>{{ transaction.id }}</td>
+      <td>{{ transaction.type | typeTransactionType }}</td>
+      <td>{{ transaction.totalAmount | priceFormat }}</td>
+      <td>{{ transaction.comment }}</td>
+      <td>{{ transaction.createdAt }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-toast></p-toast>
+<p-confirmdialog />

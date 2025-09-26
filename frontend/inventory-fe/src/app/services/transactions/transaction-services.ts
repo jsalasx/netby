@@ -1,3 +1,4 @@
+import { Transaction } from './../../components/transactions/transaction.model';
 import { FilterTransactions } from './../../components/transactions/filter-transactions/filter-transactions';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
@@ -29,6 +30,31 @@ export interface FilterTransactionsRequestDto {
 
 }
 
+export interface TransactionResponseDto {
+
+  id: string;
+  type: number;
+  details: TransactionDetailResponseDto[];
+  totalAmount: number;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TransactionDetailResponseDto {
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+export interface TransactionFilterResponseDto {
+  transactions: TransactionResponseDto[];
+  totalCount: number;
+  page: number;
+  size: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -50,8 +76,8 @@ export class TransactionServices {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
 
-  FilterTransactions(filter: FilterTransactionsRequestDto) {
-    return this.http.post<{transactions: any[], total: number}>(`${this.baseUrl}/filter`, filter);
+  getFilteredTransactions(filter: FilterTransactionsRequestDto) {
+    return this.http.post<TransactionFilterResponseDto>(`${this.baseUrl}/filter`, filter);
   }
 
 }
