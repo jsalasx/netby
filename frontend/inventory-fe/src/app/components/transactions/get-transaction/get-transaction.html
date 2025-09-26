@@ -1,1 +1,96 @@
-<p>get-transaction works!</p>
+<p-dialog
+  header="Transaction"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: 'auto' }"
+  [draggable]="false"
+  (onHide)="closeDialog()"
+>
+
+<div *ngIf="transaction() as tx; else empty" class="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-md p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Detalle de Transacción</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ tx.id }}</p>
+    </div>
+    <span
+      class="px-3 py-1 text-xs font-semibold rounded-full"
+      [ngClass]="{
+        'bg-green-100 text-green-700': tx.type === TransactionTypeEnum.Purchase,
+        'bg-red-100 text-red-700': tx.type === TransactionTypeEnum.Sale,
+        'bg-yellow-100 text-yellow-700': tx.type !== TransactionTypeEnum.Purchase && tx.type !== TransactionTypeEnum.Sale
+      }"
+    >
+      {{ tx.type === TransactionTypeEnum.Purchase ? 'Ingreso' : (tx.type === TransactionTypeEnum.Sale ? 'Egreso' : 'Otro') }}
+    </span>
+  </div>
+
+  <!-- Datos principales -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-6">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <p class="text-gray-500 text-xs">Monto total</p>
+      <p class="font-semibold">{{ tx.totalAmount | priceFormatTotal }}</p>
+    </div>
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <p class="text-gray-500 text-xs">Creado</p>
+      <p class="font-semibold">{{ tx.createdAt | date  }}</p>
+    </div>
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <p class="text-gray-500 text-xs">Actualizado</p>
+      <p class="font-semibold">{{ tx.updatedAt | date }}</p>
+    </div>
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <p class="text-gray-500 text-xs">Items</p>
+      <p class="font-semibold">{{ tx.details?.length || 0 }}</p>
+    </div>
+  </div>
+
+  <!-- Comentario -->
+  <div class="mb-6">
+    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Comentario</h3>
+    <p class="text-gray-800 dark:text-gray-100 whitespace-pre-line">{{ tx.comment || '—' }}</p>
+  </div>
+
+  <!-- Tabla de detalles -->
+  <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+    <table class="min-w-full text-sm text-left">
+      <thead class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 uppercase text-xs">
+        <tr>
+          <th class="px-4 py-2">Código</th>
+          <th class="px-4 py-2">Producto</th>
+          <th class="px-4 py-2 text-right">Cantidad</th>
+          <th class="px-4 py-2 text-right">Precio Unit.</th>
+          <th class="px-4 py-2 text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of tx.details" class="border-t border-gray-200 dark:border-gray-700">
+          <td class="px-4 py-2 font-mono text-xs">{{ d.productCode }}</td>
+          <td class="px-4 py-2">{{ d.productName }}</td>
+          <td class="px-4 py-2 text-right">{{ d.quantity | priceFormat}}</td>
+          <td class="px-4 py-2 text-right">{{ d.unitPrice | priceFormat}}</td>
+          <td class="px-4 py-2 text-right">{{ d.total | priceFormatTotal}}</td>
+        </tr>
+      </tbody>
+      <tfoot class="bg-gray-50 dark:bg-gray-800 font-semibold">
+        <tr>
+          <td colspan="4" class="px-4 py-2 text-right">Total</td>
+          <td class="px-4 py-2 text-right">
+            {{
+             tx.totalAmount | priceFormatTotal
+
+            }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<ng-template #empty>
+  <div class="text-gray-500 text-center py-6">No hay transacción para mostrar.</div>
+</ng-template>
+
+
+</p-dialog>

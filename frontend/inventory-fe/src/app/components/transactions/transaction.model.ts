@@ -46,12 +46,16 @@ export class Transaction {
 
 export class TransactionDetail {
   productId: string;
+  productName: string;
+  productCode: string;
   quantity: number;
   unitPrice: number;
   total: number;
 
-  constructor(productId: string, quantity: number, unitPrice: number) {
+  constructor(productId: string, productName: string, productCode: string, quantity: number, unitPrice: number) {
     this.productId = productId;
+    this.productName = productName;
+    this.productCode = productCode;
     this.quantity = quantity;
     this.unitPrice = unitPrice;
     this.total = this.quantity * this.unitPrice;

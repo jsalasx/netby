@@ -1,11 +1,9 @@
-<p>list-transactions works!</p>
-
 <p-button label="Cargar" (click)="onLoadTransactions()" />
 <app-save-transaction></app-save-transaction>
 
+<app-get-transaction (onCloseDialog)="onCloseTransactionDialog()" [onClickView]="_onClickView()" [transaction]="selectedTransaction()"></app-get-transaction>
 
-
-<p-contextmenu #cm [model]="menuItems" (onHide)="selectedTransaction.set(undefined)" />
+<p-contextmenu #cm [model]="menuItems" />
 <p-table
   [value]="transactions()"
   [(contextMenuSelection)]="selectedTransaction"
@@ -32,7 +30,7 @@
     >
       <td>{{ transaction.id }}</td>
       <td>{{ transaction.type | typeTransactionType }}</td>
-      <td>{{ transaction.totalAmount | priceFormat }}</td>
+      <td>{{ transaction.totalAmount | priceFormatTotal }}</td>
       <td>{{ transaction.comment }}</td>
       <td>{{ transaction.createdAt }}</td>
     </tr>

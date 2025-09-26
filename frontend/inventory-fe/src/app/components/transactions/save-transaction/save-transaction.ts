@@ -10,7 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
-import { TransactionTypeEnum, TransactionTypeOption, TransactionTypeOptions } from '@app/enums/transaction-types.enum';
+import { TransactionTypeOption, TransactionTypeOptions } from '@app/enums/transaction-types.enum';
 import { ChooseProducts } from '../choose-products/choose-products';
 import { Transaction, TransactionDetail } from '../transaction.model';
 import { MessageService } from 'primeng/api';
@@ -57,7 +57,8 @@ export class SaveTransaction {
         detail.patchValue({
           quantity: product.cantidad,
           productId: product.id,
-          code: product.code + "//" + product.name,
+          productName : product.name,
+          productCode : product.code,
           unitPrice: product.price /100 ,
           totalPrice: (product.price /100 ) * product.cantidad,
         });
@@ -81,6 +82,8 @@ export class SaveTransaction {
       formValue.type as any || undefined,
       formValue.details.map((detail: any) => new TransactionDetail(
         detail.productId,
+        detail.productName,
+        detail.productCode,
         detail.quantity,
         detail.unitPrice
       )),
@@ -107,7 +110,8 @@ export class SaveTransaction {
   createDetail(): FormGroup {
     return new FormGroup({
       productId: new FormControl(''),
-      code: new FormControl(''),
+      productName: new FormControl(''),
+      productCode: new FormControl(''),
       quantity: new FormControl(0),
       unitPrice: new FormControl(0),
       totalPrice: new FormControl(0),
@@ -177,6 +181,8 @@ export class SaveTransaction {
       this.transactionForm.value.type as any,
       this.transactionForm.value.details!.map((detail: any) => new TransactionDetail(
         detail.productId,
+        detail.productName,
+        detail.productCode,
         detail.quantity,
         detail.unitPrice
       )),

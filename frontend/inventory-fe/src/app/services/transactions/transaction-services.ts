@@ -43,6 +43,8 @@ export interface TransactionResponseDto {
 
 export interface TransactionDetailResponseDto {
   productId: string;
+  productName: string;
+  productCode: string;
   quantity: number;
   unitPrice: number;
   total: number;
@@ -73,7 +75,7 @@ export class TransactionServices {
   }
 
   getTransactionById(id: string) {
-    return this.http.get(`${this.baseUrl}/${id}`);
+    return this.http.get<TransactionResponseDto>(`${this.baseUrl}/${id}`);
   }
 
   getFilteredTransactions(filter: FilterTransactionsRequestDto) {
