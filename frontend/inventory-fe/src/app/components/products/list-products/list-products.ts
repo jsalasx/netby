@@ -14,6 +14,7 @@ import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { FilterProduct } from '../filter-product/filter-product';
+import { ObjectUtils } from '@app/utils/clean-object-utils';
 @Component({
   selector: 'app-list-products',
   imports: [
@@ -57,17 +58,13 @@ export class ListProducts {
     this.onClickEdit.set(false);
   }
 
-  cleanObject<T extends object>(obj: T): Partial<T> {
-    return Object.fromEntries(
-      Object.entries(obj).filter(([_, v]) => v !== null && v !== undefined && v !== '')
-    ) as Partial<T>;
-  }
+
 
   onLoadProducts(filterAux?: any) {
     const filter: FilterProductsRequestDto = {
       page: 1,
       size: 10,
-      ...this.cleanObject(filterAux ?? {})
+      ...ObjectUtils.cleanObject(filterAux ?? {})
     };
     this.productService.getFilteredProducts(filter).subscribe((products) => {
       console.log(products);

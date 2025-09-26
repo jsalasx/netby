@@ -43,8 +43,8 @@ export class SaveProduct {
       category: this.productForm.value.category || '',
       description: this.productForm.value.description || '',
       imageUri: this.productForm.value.imageUri || '',
-      price: this.productForm.value.price || 0,
-      stock: this.productForm.value.stock || 0
+      price: this.productForm.value.price ? this.productForm.value.price * 100 : 0,
+      stock: this.productForm.value.stock ? this.productForm.value.stock * 100 : 0,
     };
     console.log(req);
     this.productService.SaveProduct(req).subscribe({

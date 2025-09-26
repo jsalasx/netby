@@ -27,6 +27,7 @@ export interface ProductResponseDto {
 export interface ProductDto {
   id: string;
   name: string;
+  code: string;
   category: string;
   description: string;
   imageUri: string;
@@ -34,6 +35,7 @@ export interface ProductDto {
   stock: number;
   createdAt?: string;
   updatedAt?: string;
+  cantidad?: number; // Para uso en transacciones
 }
 
 export interface SaveProductRequestDto {

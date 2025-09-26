@@ -76,6 +76,7 @@
           formControlName="price"
           name="price"
           [min]="0"
+          [minFractionDigits]="2" [maxFractionDigits]="2"
           [useGrouping]="false"
           mode="decimal"
         />
@@ -89,6 +90,7 @@
           formControlName="stock"
           name="stock"
           [min]="0"
+          [minFractionDigits]="2" [maxFractionDigits]="2"
           [useGrouping]="false"
           mode="decimal"
         />

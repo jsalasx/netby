@@ -43,7 +43,7 @@ export class EditProduct {
           description: this.product()?.description || '',
           category: this.product()?.category || '',
           imageUri: this.product()?.imageUri || '',
-          price: this.product()?.price || 0,
+          price: this.product()?.price ? (this.product()?.price! / 100) : 0,
         });
       }
     });
@@ -67,7 +67,7 @@ export class EditProduct {
       category: this.productForm.value.category || '',
       description: this.productForm.value.description || '',
       imageUri: this.productForm.value.imageUri || '',
-      price: this.productForm.value.price || 0,
+      price: this.productForm.value.price ? this.productForm.value.price * 100 : 0,
     };
     console.log(req);
     this.productService.UpdateProduct(req).subscribe({

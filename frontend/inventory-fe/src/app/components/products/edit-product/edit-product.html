@@ -60,6 +60,7 @@
           inputId="price"
           class="flex-auto w-full"
           formControlName="price"
+          [minFractionDigits]="2" [maxFractionDigits]="5"
           name="price"
           [min]="0"
           [useGrouping]="false"

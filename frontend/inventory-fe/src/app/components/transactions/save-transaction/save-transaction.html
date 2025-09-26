@@ -1,0 +1,75 @@
+<p>save-transaction works!</p>
+
+
+<p-button (click)="showDialog()" label="Nueva Transacción" />
+
+
+
+<p-dialog
+  header="Guardar Producto"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '100%' }"
+  [draggable]="false"
+>
+  <form [formGroup]="transactionForm" (ngSubmit)="onSaveTransaction()" class="space-y-4">
+  <!-- Tipo -->
+  <div>
+    <label class="block font-semibold">Tipo</label>
+    <p-select [options]="transactionTypes" formControlName="type" optionValue="key"  optionLabel="label" placeholder="Seleccione un tipo" class="w-full md:w-56" />
+  </div>
+
+  <!-- Lista de detalles -->
+  <div formArrayName="details" class="space-y-3">
+  <label class="block font-semibold">Detalles</label>
+
+  <!-- Encabezados -->
+  <div class="grid grid-cols-6 gap-4 font-semibold">
+    <div>Producto</div>
+    <div>Codigo</div>
+    <div>Cantidad</div>
+    <div>Precio Unitario</div>
+    <div>Precio Total</div>
+    <div></div> <!-- Columna para el botón -->
+  </div>
+
+  <!-- Filas dinámicas -->
+  <div
+    *ngFor="let detail of details.controls; let i = index"
+    [formGroupName]="i"
+    class="grid grid-cols-6 gap-4 items-center"
+  >
+    <input readonly pInputText formControlName="productId" placeholder="Producto" />
+    <input readonly pInputText formControlName="code" placeholder="Codigo" />
+    <p-inputNumber (onBlur)="updateTotalPrice(i)" [minFractionDigits]="2" [maxFractionDigits]="2" formControlName="quantity" [min]="0"></p-inputNumber>
+    <p-inputNumber (onBlur)="updateTotalPrice(i)" [minFractionDigits]="2" [maxFractionDigits]="2" formControlName="unitPrice" [min]="0"></p-inputNumber>
+    <p-inputNumber readonly formControlName="totalPrice" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="5"></p-inputNumber>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="removeDetail(i)"
+    ></button>
+  </div>
+</div>
+
+  <div>
+    <app-choose-products (productsToEmit)="onProductsSelected($event)"></app-choose-products>
+  </div>
+
+  <!-- Total -->
+  <div>
+    <label class="block font-semibold">Total</label>
+    <p-inputNumber readonly="" formControlName="totalAmount" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0"></p-inputNumber>
+  </div>
+
+  <!-- Comentario -->
+  <div>
+    <label class="block font-semibold">Comentario</label>
+    <textarea pInputTextarea formControlName="comment"></textarea>
+  </div>
+
+  <button type="submit" pButton label="Guardar Transacción"></button>
+</form>
+</p-dialog>
