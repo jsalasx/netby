@@ -9,6 +9,14 @@ restart-msproducts:
 	kubectl rollout restart deployment ms-products -n netby-inventory	
 
 dp: build-msproducts restart-msproducts
+
+build-msauth:
+	docker build -t msauth:latest -f MsAuth/Dockerfile .
+
+restart-msauth:
+	kubectl rollout restart deployment ms-auth -n netby-inventory
+	
+da: build-msauth restart-msauth
 	
 
 build-mstransactions:

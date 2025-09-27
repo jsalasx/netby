@@ -35,3 +35,10 @@ spec:
             name: ms-products-service
             port:
               number: 80
+      - path: "/api/user"
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: ms-auth-service
+            port:
+              number: 80

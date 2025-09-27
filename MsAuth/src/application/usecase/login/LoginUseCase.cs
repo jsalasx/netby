@@ -2,6 +2,7 @@ using MsAuth.Domain.Entities;
 using MsAuth.Domain.Ports;
 using Shared.Application.Service;
 using Shared.Dto.User;
+using Shared.Infrastructure;
 
 
 namespace MsAuth.Application.UseCase;
@@ -9,17 +10,12 @@ namespace MsAuth.Application.UseCase;
 public class LoginUseCase
 {
     private readonly IUserRepository _userRepository;
-    private readonly string _jwtSecret;
-    private readonly string _jwtRefreshSecret;
+    private readonly JwtSettings _jwtSettings;
 
-    private readonly int _expiresInMinutes;
-
-    public LoginUseCase(IUserRepository userRepository, string jwtSecret, string jwtRefreshSecret, int expiresInMinutes = 60)
+    public LoginUseCase(IUserRepository userRepository, JwtSettings jwtSettings)
     {
         _userRepository = userRepository;
-        _jwtSecret = jwtSecret;
-        _jwtRefreshSecret = jwtRefreshSecret;
-        _expiresInMinutes = expiresInMinutes;
+        _jwtSettings = jwtSettings;
         
     }
 
@@ -46,10 +42,10 @@ public class LoginUseCase
 
         var audience = "ms-products,ms-transactions";
         var issuer = "ms-auth";
-        var token = JwtService.GenerateToken(_jwtSecret, issuer, audience, claims, _expiresInMinutes);
-        var refreshToken = JwtService.GenerateToken(_jwtRefreshSecret, issuer, audience, claims, _expiresInMinutes);
+        var token = JwtService.GenerateToken(_jwtSettings.Secret, issuer, audience, claims, _jwtSettings.ExpiresInMinutes);
+        var refreshToken = JwtService.GenerateToken(_jwtSettings.RefreshSecret, issuer, audience, claims, _jwtSettings.ExpiresInMinutes * 24 * 7); // Refresh token válido por 7 días
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        long expiresIn = now + (_expiresInMinutes * 60);
+        long expiresIn = now + (_jwtSettings.ExpiresInMinutes * 60);
         return new LoginResponseDto
         {
             AccessToken = token,

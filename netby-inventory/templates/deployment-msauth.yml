@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-auth
+  namespace: netby-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-auth
+  template:
+    metadata:
+      labels:
+        app: ms-auth
+    spec:
+      containers:
+      - name: ms-auth
+        image: msauth:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        envFrom:
+        - configMapRef:
+            name: ms-auth-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-auth-service
+  namespace: netby-inventory
+spec:
+  selector:
+    app: ms-auth
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80 # Puerto dentro del cluster
+    targetPort: 8080 # Puerto del contenedor (FastAPI)
+  type: ClusterIP # Exponer el servicio al exterior
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-auth-config
+  namespace: netby-inventory
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  DB_CONNECTION: "Server=mssql,1433;Database=Users;User Id=sa;Password=StrongP@ssw0rd123!;TrustServerCertificate=True;"
+  JWT_SECRET: "passwordjwt_netbysolutionsinventory"
+  JWT_REFRESH_SECRET: "passwordjwt_refresh_netbysolutionsinventory"
+  JWT_EXPIRES_IN_MINUTES: "60"
+  #REDIS_CONNECTION: "my-redis-master.default.svc.cluster.local:6379"
+  #REDIS_PASSWORD: "WNMKhdf6H1"

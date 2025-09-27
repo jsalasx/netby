@@ -4,6 +4,7 @@ using MsAuth.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using MsAuth.Domain.Ports;
 using MsAuth.Application.UseCase;
+using Shared.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -32,6 +33,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+string? jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
+string? jwtRefreshSecret = Environment.GetEnvironmentVariable("JWT_REFRESH_SECRET");
+int jwtExpiresInMinutes = Environment.GetEnvironmentVariable("JWT_EXPIRES_IN_MINUTES") != null ?
+    int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRES_IN_MINUTES")!) : 60;
+
+var jwtSettings = new JwtSettings
+{
+    Secret = jwtSecret ?? "default_secret_key",
+    RefreshSecret = jwtRefreshSecret ?? "default_refresh_secret_key",
+    ExpiresInMinutes = jwtExpiresInMinutes
+
+};
+builder.Services.AddSingleton(jwtSettings);
 
 // Use Cases
 builder.Services.AddScoped<LoginUseCase>();
