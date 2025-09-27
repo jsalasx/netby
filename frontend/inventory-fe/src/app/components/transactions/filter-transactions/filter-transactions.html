@@ -1,1 +1,117 @@
-<p>filter-transactions works!</p>
+<form
+  [formGroup]="transactionFilterForm"
+  (ngSubmit)="onFilter()"
+  class="p-4 border border-gray-300 rounded-lg shadow-md w-full max-w-5xl bg-white"
+>
+  <div class="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-y-4">
+    <!-- Id -->
+    <div class="flex items-center gap-4">
+      <label for="id" class="font-semibold">Id</label>
+      <input pInputText id="id" formControlName="id" />
+    </div>
+
+    <!-- Tipo -->
+    <div class="flex gap-4 items-center">
+      <label class="block font-semibold">Tipo</label>
+      <p-select
+        [options]="transactionTypes"
+        formControlName="type"
+        optionValue="key"
+        optionLabel="label"
+        placeholder="Seleccione un tipo"
+        class="w-full md:w-56"
+      />
+    </div>
+    <!-- Products Id (Array dinámico) -->
+    <div class="flex flex-col">
+      <h3 class="font-semibold mb-2">Productos</h3>
+      <div formArrayName="productIds" class="flex flex-col gap-2">
+        <div
+          *ngFor="let control of productIds.controls; let i = index"
+          class="flex items-center gap-4"
+        >
+          <input pInputText [formControlName]="i" class="flex-auto" placeholder="Id de producto" />
+          <button
+            type="button"
+            pButton
+            icon="pi pi-times"
+            severity="danger"
+            (click)="removeProductId(i)"
+          ></button>
+        </div>
+      </div>
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Agregar producto"
+        class="mt-2"
+        (click)="addProductId()"
+      ></button>
+    </div>
+    </div>
+    <div class="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-4">
+
+    <!-- Total Amount -->
+    <div class="flex flex-col">
+      <h3 class="font-semibold mb-2">Monto Total</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex items-center gap-4">
+          <label class="w-32">≥</label>
+          <p-inputNumber
+            formControlName="totalAmountGreaterThanEqual"
+            [min]="0"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-32">&lt;</label>
+          <p-inputNumber
+            formControlName="totalAmountLessThan"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0"
+            [useGrouping]="false"
+            mode="decimal"
+            class="flex-auto w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Fechas -->
+    <div>
+      <h3 class="font-semibold mb-2">Fecha</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex items-center gap-4">
+          <label class="">Desde</label>
+          <p-datepicker
+            [showTime]="true"
+            formControlName="createdAfterEqual"
+            dateFormat="yy-mm-dd"
+            class="flex-auto w-full"
+          ></p-datepicker>
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="">Hasta</label>
+          <p-datepicker
+            [showTime]="true"
+            formControlName="createdBefore"
+            dateFormat="yy-mm-dd"
+            class="flex-auto w-full"
+          ></p-datepicker>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="flex justify-end gap-4 mt-6">
+    <p-button type="button" label="Limpiar" (click)="onClear()" severity="secondary" />
+    <p-button type="submit" label="Filtrar" />
+  </div>
+</form>

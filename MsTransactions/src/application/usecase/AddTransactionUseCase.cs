@@ -2,6 +2,7 @@ using MsTransactions.Domain.Entities;
 using MsTransactions.Domain.Port;
 using MsTransactions.Infrastructure.Adapters;
 using MsTransactions.Infrastructure.Persistence;
+using Shared.Dto;
 using Shared.Dto.Transaction;
 
 namespace MsTransactions.Application.UseCase;

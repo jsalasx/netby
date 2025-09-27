@@ -201,8 +201,10 @@ export class SaveTransaction {
       next: (response) => {
         this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction saved successfully.'});
         console.log('Transaction saved successfully:', response);
+        this.visible.set(false);
       },
       error: (error) => {
+          this.messageService.add({severity:'error', summary: 'Error', detail: 'Failed to save transaction.'});
         console.error('Error saving transaction:', error);
       }
     });

@@ -15,6 +15,8 @@ import {
 import { TypeTransactionTypePipe } from '@app/pipes/transaction/type-transaction-type-pipe';
 import { GetTransaction } from '../get-transaction/get-transaction';
 import { PriceFormatTotalPipe } from '@app/pipes/products/price-format-total-pipe';
+import { FilterTransactions } from '../filter-transactions/filter-transactions';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-list-transactions',
   imports: [
@@ -26,7 +28,9 @@ import { PriceFormatTotalPipe } from '@app/pipes/products/price-format-total-pip
     ConfirmDialog,
     TypeTransactionTypePipe,
     GetTransaction,
-    PriceFormatTotalPipe
+    PriceFormatTotalPipe,
+    FilterTransactions,
+    DatePipe,
   ],
   templateUrl: './list-transactions.html',
   styleUrl: './list-transactions.css',
@@ -58,12 +62,20 @@ export class ListTransactions {
     this.onLoadTransactions();
   }
 
+  getUserTimezone(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  }
+
   onCloseTransactionDialog() {
     this.selectedTransaction.set(undefined);
     this._onClickView.set(false);
   }
 
-  onLoadTransactions(filterAux?: any) {
+  onFilterTransactions(filter: FilterTransactionsRequestDto) {
+    this.onLoadTransactions(filter);
+  }
+
+  onLoadTransactions(filterAux?: FilterTransactionsRequestDto) {
     const filter: FilterTransactionsRequestDto = {
       page: 1,
       size: 10,
@@ -87,11 +99,17 @@ export class ListTransactions {
         reject();
       }
     });
-    promise.then(() => {
-      this._onClickView.set(true);
-    }).catch(() => {
-      this.messageService.add({severity:'error', summary: 'Error', detail: 'Transaction is undefined.'});
-    });
+    promise
+      .then(() => {
+        this._onClickView.set(true);
+      })
+      .catch(() => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Transaction is undefined.',
+        });
+      });
   }
 
   onDeleteTransaction(transaction: TransactionResponseDto) {

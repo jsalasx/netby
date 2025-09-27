@@ -21,14 +21,21 @@ public class StockController : ControllerBase
     [HttpPost("update/batch")]
     public async Task<IActionResult> AdjustStock([FromBody] List<UpdateStockDtoRequest> requests, CancellationToken ct)
     {
-        var result = await _updateStockUseCase.Execute(requests, ct);
-
-        if (!result.Success)
+        try
         {
-            return BadRequest(new { errors = result.Errors });
-        }
+            var result = await _updateStockUseCase.Execute(requests, ct);
 
-        return Ok(new { message = result.Message });
+            if (!result.Success)
+            {
+                return BadRequest(new { errors = result.Errors });
+            }
+
+            return Ok(new { message = result.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
 

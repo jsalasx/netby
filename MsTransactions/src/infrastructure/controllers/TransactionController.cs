@@ -31,8 +31,14 @@ public class TransactionController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
-        var result = await _getTransactionByIdUseCase.ExecuteAsync(id, ct);
-        return Ok(result);
+        try
+        {
+            var result = await _getTransactionByIdUseCase.ExecuteAsync(id, ct);
+            return Ok(result);
+        } catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
 
     }
 
@@ -40,17 +46,29 @@ public class TransactionController : ControllerBase
     [HttpPost("filter")]
     public async Task<IActionResult> GetByFilter([FromBody] TransactionFilterRequestDto request, CancellationToken ct)
     {
-        var result = await _getTransactionByFilterUseCase.ExecuteAsync(request, ct);
-        return Ok(result);
+        try
+        {
+            var result = await _getTransactionByFilterUseCase.ExecuteAsync(request, ct);
+            return Ok(result);
+        } catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
     // 🔹 CREATE
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateTransactionRequestDto request, CancellationToken ct)
     {
-        var entity = TransactionMapper.ToEntity(request);
-        var result = await _addTransactionUseCase.ExecuteAsync(entity, ct);
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        try
+        {
+            var entity = TransactionMapper.ToEntity(request);
+            var result = await _addTransactionUseCase.ExecuteAsync(entity, ct);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        } catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
 
@@ -58,8 +76,14 @@ public class TransactionController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
-        await _deleteTransactionUseCase.ExecuteAsync(id, ct);
-        return NoContent();
+        try
+        {
+            await _deleteTransactionUseCase.ExecuteAsync(id, ct);
+            return NoContent();
+        } catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
 

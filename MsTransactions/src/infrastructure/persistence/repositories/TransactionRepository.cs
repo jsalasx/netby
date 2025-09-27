@@ -73,6 +73,8 @@ public class TransactionRepository : ITransactionRepository
 
     private IQueryable<TransactionEntity> ApplyFilter(IQueryable<TransactionEntity> query, TransactionFilterRequestDto filter, bool includeDetails)
     {
+        Console.WriteLine("Applying filter...");
+        Console.WriteLine($"Filter: {System.Text.Json.JsonSerializer.Serialize(filter)}");
         if (includeDetails)
             query = query.Include(t => t.Details);
 
@@ -96,6 +98,8 @@ public class TransactionRepository : ITransactionRepository
 
         if (filter.CreatedBefore.HasValue)
             query = query.Where(t => t.CreatedAt < filter.CreatedBefore.Value);
+
+        query = query.OrderByDescending(t => t.CreatedAt);
 
         return query;
     }

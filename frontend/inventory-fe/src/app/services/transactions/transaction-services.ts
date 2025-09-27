@@ -20,13 +20,13 @@ export interface SaveTransactionDetailRequestDto {
 export interface FilterTransactionsRequestDto {
   id?: string;
   type? : number;
-  productsIds?: string[];
+  productIds?: string[];
   totalAmountGreaterThanEqual?: number;
-  totalAmontLessThan?: number;
+  totalAmountLessThan?: number;
   createdAfterEqual?: Date;
   createdBefore?: Date;
-  page: number;
-  size: number;
+  page?: number;
+  size?: number;
 
 }
 

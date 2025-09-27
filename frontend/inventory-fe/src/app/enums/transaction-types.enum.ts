@@ -21,3 +21,17 @@ export interface TransactionTypeOption {
   key: TransactionTypeEnum;
   label: string;
 }
+
+
+const TransactionTypeMap: Record<number, string> = {
+  [TransactionTypeEnum.Purchase]: 'Compra',
+  [TransactionTypeEnum.Sale]: 'Venta',
+  [TransactionTypeEnum.Return]: 'Devolución de ventas',
+  [TransactionTypeEnum.PurchaseReturn]: 'Devolución de compra',
+  [TransactionTypeEnum.PurchaseAdjustment]: 'Ajuste de compra',
+  [TransactionTypeEnum.SaleAdjustment]: 'Ajuste de venta',
+};
+
+export function getTransactionTypeLabel(value: number): string {
+  return TransactionTypeMap[value] ?? 'Unknown';
+}

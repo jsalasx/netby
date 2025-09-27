@@ -18,7 +18,13 @@ public class GetTransactionByFilterUseCase
         var transactions = await _transactionRepository.GetByFilterAsync(filter, ct);
         if (transactions == null || !transactions.Any())
         {
-            throw new Exception("Transaction not found");
+            return new TransactionFilterResponseDto
+            {
+                Transactions = [],
+                TotalCount = 0,
+                Page = filter.Page,
+                PageSize = filter.PageSize
+            };
         }
 
         var totalCount = await _transactionRepository.CountByFilterAsync(filter, ct);
