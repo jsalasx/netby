@@ -14,21 +14,5 @@ public class ProductEntity
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public void DecrementStock(int quantity)
-    {
-        if (quantity <= 0)
-            throw new ArgumentException("Quantity must be greater than zero", nameof(quantity));
-        if (quantity > Stock)
-            throw new InvalidOperationException("Insufficient stock available");
-        Stock -= quantity;
-        UpdatedAt = DateTime.UtcNow;
-    }
     
-    public void IncrementStock(int quantity)
-    {
-        if (quantity <= 0)
-            throw new ArgumentException("Quantity must be greater than zero", nameof(quantity));
-        Stock += quantity;
-        UpdatedAt = DateTime.UtcNow;
-    }
 }
