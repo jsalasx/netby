@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MsTransactions.Domain.Entities;
 using Shared.Dto.Transaction;
 using MsTransactions.Domain.Port;
+using Shared.Enums;
 
 public class TransactionRepository : ITransactionRepository
 {
@@ -26,11 +27,12 @@ public class TransactionRepository : ITransactionRepository
         return await query.LongCountAsync(ct);
     }
 
-    public async Task DeleteAsync(Guid id, CancellationToken ct)
+    public async Task DeleteAsync(Guid id, TransactionTypeEnum type, CancellationToken ct)
     {
         var transaction = await _context.Transactions.FindAsync(new object[] { id }, ct);
         if (transaction != null)
         {
+            transaction.Type = type;
             transaction.IsDeleted = true;
             await _context.SaveChangesAsync(ct);
         }

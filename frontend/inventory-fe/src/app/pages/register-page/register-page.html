@@ -1,1 +1,75 @@
-<p>register-page works!</p>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <div class="w-full flex justify-center items-center mb-6">
+      <img src="assets/logo.png" alt="Logo" class="w-[200px] mx-auto mb-4" />
+    </div>
+    <h1 class="text-2xl font-bold text-center mb-6">Registro</h1>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="space-y-6">
+      <!-- Name -->
+      <div>
+        <label for="name" class="block font-medium mb-1">Nombre</label>
+        <input
+          pInputText
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Ingrese su nombre"
+          class="w-full"
+        />
+        <small
+          *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+          class="text-red-500"
+          >El nombre es requerido</small
+        >
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block font-medium mb-1">Email</label>
+        <input
+          pInputText
+          id="email"
+          type="text"
+          formControlName="email"
+          placeholder="Ingrese su email"
+          class="w-full"
+        />
+        <small
+          *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+          class="text-red-500"
+          >El email es requerido</small
+        >
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block font-medium mb-1">Contraseña</label>
+        <input
+          pInputText
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Ingrese su contraseña"
+          class="w-full"
+        />
+        <small
+          *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+          class="text-red-500"
+          >La contraseña es requerida</small
+        >
+      </div>
+
+      <!-- Botón -->
+      <div class="w-full flex justify-center items-center">
+        <p-button
+          type="submit"
+          label="Registrarse"
+          [disabled]="registerForm.invalid"
+        ></p-button>
+      </div>
+    </form>
+
+
+  </div>
+</div>

@@ -1,5 +1,6 @@
 using MsTransactions.Domain.Entities;
 using Shared.Dto.Transaction;
+using Shared.Enums;
 
 namespace MsTransactions.Domain.Port;
 
@@ -11,5 +12,5 @@ public interface ITransactionRepository
     Task<long> CountByFilterAsync(TransactionFilterRequestDto filter, CancellationToken ct);
     Task AddAsync(TransactionEntity transaction, CancellationToken ct);
     Task<TransactionEntity?> UpdateAsync(TransactionEntity transaction, CancellationToken ct);
-    Task DeleteAsync(Guid id, CancellationToken ct);
+    Task DeleteAsync(Guid id,  TransactionTypeEnum type,  CancellationToken ct);
 }

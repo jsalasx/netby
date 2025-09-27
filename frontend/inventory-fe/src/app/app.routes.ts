@@ -8,7 +8,7 @@ import { ErrorPage } from './pages/error-page/error-page';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'products',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {

@@ -26,9 +26,8 @@ public class DeleteTransactionUseCase
             throw new Exception("Transaction not found");
         }
         // Lógica para eliminar una transacción
-
-        if (transaction.Type == TransactionTypeEnum.Return || transaction.Type == TransactionTypeEnum.PurchaseReturn || 
-            transaction.Type == TransactionTypeEnum.Purchase)
+        var typeIn = transaction.Type;
+        if (transaction.Type != TransactionTypeEnum.Sale)
         {
             throw new Exception("Cannot delete a " + transaction.Type + " transaction");
         }
@@ -47,7 +46,7 @@ public class DeleteTransactionUseCase
             throw new Exception("Error updating stock in Product Service: " + ex.Message);
         }
 
-        await _transactionRepository.DeleteAsync(transactionId, ct);
+        await _transactionRepository.DeleteAsync(transactionId, typeIn, ct);
 
         transaction.Id = Guid.NewGuid();
         transaction.CreatedAt = DateTime.UtcNow;

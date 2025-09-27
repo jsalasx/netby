@@ -1,1 +1,60 @@
-<p>login-page works!</p>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <div class="w-full flex justify-center items-center mb-6">
+      <img src="assets/logo.png" alt="Logo" class="w-[200px] mx-auto mb-4" />
+    </div>
+    <h1 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-6">
+      <!-- Usuario -->
+      <div>
+        <label for="email" class="block font-medium mb-1">Email</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Ingrese su email"
+          class="w-full"
+        />
+        <small
+          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          class="text-red-500"
+          >El email es requerido</small
+        >
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block font-medium mb-1">Contraseña</label>
+        <input
+          pInputText
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Ingrese su contraseña"
+          class="w-full"
+        />
+        <small
+          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="text-red-500"
+          >La contraseña es requerida</small
+        >
+      </div>
+
+      <!-- Botón -->
+      <div class="w-full flex justify-center items-center">
+        <p-button
+          type="submit"
+          label="Ingresar"
+          [disabled]="loginForm.invalid"
+        ></p-button>
+      </div>
+    </form>
+
+    <p class="text-sm text-center text-gray-500 mt-4">
+      ¿No tienes cuenta?
+      <a routerLink="/register" class="text-blue-600 hover:underline">Regístrate</a>
+    </p>
+  </div>
+</div>
