@@ -54,3 +54,6 @@ data:
   ASPNETCORE_ENVIRONMENT: "Development"
   DB_CONNECTION: "Server=mssql,1433;Database=Transactions;User Id=sa;Password=StrongP@ssw0rd123!;TrustServerCertificate=True;"
   URL_PRODUCTS_API: "http://ms-products-service"
+  JWT_SECRET: "passwordjwt_netbysolutionsinventory"
+  JWT_REFRESH_SECRET: "passwordjwt_refresh_netbysolutionsinventory"
+  JWT_EXPIRES_IN_MINUTES: "60"

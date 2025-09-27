@@ -4,6 +4,7 @@ using MsTransactions.Infrastructure.Persistence;
 using MsTransactions.Infrastructure.Persistence.Repositories;
 using MsTransactions.Domain.Port;
 using MsTransactions.Application.UseCase;
+using Shared.Application.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -59,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseJwtMiddleware();
 app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
 // Map controllers

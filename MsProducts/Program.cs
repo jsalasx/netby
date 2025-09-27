@@ -4,6 +4,7 @@ using MsProducts.Domain.Ports;
 using MsProducts.Infrastructure.Persistence;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
+using Shared.Application.Service;
 using StackExchange.Redis;
 
 
@@ -75,7 +76,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseJwtMiddleware();
 app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
 // Map controllers
