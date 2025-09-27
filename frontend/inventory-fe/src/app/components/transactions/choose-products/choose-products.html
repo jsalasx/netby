@@ -24,6 +24,7 @@
       >
         <ng-template #header>
           <tr>
+            <th></th>
             <th>ID</th>
             <th>Codigo</th>
             <th>Nombre</th>
@@ -38,6 +39,9 @@
             (dblclick)="selectProductToTransaction(product)"
             [pSelectableRow]="product"
           >
+            <td>
+              <p-button icon="pi pi-plus" (click)="selectProductToTransaction(product)"></p-button>
+            </td>
             <td class="max-w-[10px] truncate text-ellipsis">{{ product.id }}</td>
             <td class="truncate text-ellipsis">{{ product.code }}</td>
             <td class="truncate text-ellipsis">{{ product.name }}</td>
