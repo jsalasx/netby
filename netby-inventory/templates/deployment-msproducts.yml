@@ -56,5 +56,5 @@ data:
   REDIS_CONNECTION: "my-redis-master.default.svc.cluster.local:6379"
   JWT_SECRET: "passwordjwt_netbysolutionsinventory"
   JWT_REFRESH_SECRET: "passwordjwt_refresh_netbysolutionsinventory"
-  JWT_EXPIRES_IN_MINUTES: "60"
+  JWT_EXPIRES_IN_MINUTES: "3600"
   #REDIS_PASSWORD: "WNMKhdf6H1"

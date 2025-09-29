@@ -55,6 +55,6 @@ data:
   DB_CONNECTION: "Server=mssql,1433;Database=Users;User Id=sa;Password=StrongP@ssw0rd123!;TrustServerCertificate=True;"
   JWT_SECRET: "passwordjwt_netbysolutionsinventory"
   JWT_REFRESH_SECRET: "passwordjwt_refresh_netbysolutionsinventory"
-  JWT_EXPIRES_IN_MINUTES: "60"
+  JWT_EXPIRES_IN_MINUTES: "3600"
   #REDIS_CONNECTION: "my-redis-master.default.svc.cluster.local:6379"
   #REDIS_PASSWORD: "WNMKhdf6H1"
