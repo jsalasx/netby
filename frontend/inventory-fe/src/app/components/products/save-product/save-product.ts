@@ -1,22 +1,26 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductService, SaveProductRequestDto } from '@app/services/products/product-service';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-save-product',
   imports: [DialogModule, ButtonModule, InputTextModule, ReactiveFormsModule,
-     InputNumberModule, TextareaModule],
+     InputNumberModule, TextareaModule, ToastModule],
   templateUrl: './save-product.html',
-  styleUrl: './save-product.css'
+  styleUrl: './save-product.css',
+  providers: [MessageService]
 })
 export class SaveProduct {
   visible = signal(false);
   productService = inject(ProductService)
   saved = output<void>();
+  messageService = inject(MessageService);
 
   showDialog() {
     this.visible.set(true);
@@ -52,8 +56,10 @@ export class SaveProduct {
         console.log('Product saved successfully', res);
         this.saved.emit();
         this.closeDialog();
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Producto guardado correctamente'});
       },
       error: (err) => {
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Error al guardar el producto'});
         console.error('Error saving product', err);
       }
     });

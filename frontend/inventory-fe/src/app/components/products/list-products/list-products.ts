@@ -39,6 +39,12 @@ export class ListProducts {
   onClickEdit = signal(false);
   messageService = inject(MessageService);
   confirmationService = inject(ConfirmationService);
+  page = signal(1);
+  size = signal(2);
+  totalCount = signal(0);
+  first = signal(0);
+  last = signal(2);
+  _filter = signal<FilterProductsRequestDto>({});
 
   menuItems: MenuItem[] = [
     {
@@ -58,18 +64,33 @@ export class ListProducts {
     this.onClickEdit.set(false);
   }
 
+  pageChange(event: any) {
+    console.log(event);
+    this.first.set(event.first);
+    if (event.first === 0) {
+
+      this.page.set(1);
+    } else {
+      this.page.set((event.first / event.rows) + 1);
+    }
+    this.size.set(event.rows);
+    this.onLoadProducts(this._filter());
+  }
 
 
-  onLoadProducts(filterAux?: any) {
+
+  onLoadProducts(filterAux?: FilterProductsRequestDto) {
     const filter: FilterProductsRequestDto = {
-      page: 1,
-      size: 10,
-      ...ObjectUtils.cleanObject(filterAux ?? {})
+      ...ObjectUtils.cleanObject(filterAux ?? {}),
+      page: this.page(),
+      pageSize: this.size(),
     };
+    console.log('Loading products with filter', filter);
     this.productService.getFilteredProducts(filter).subscribe((products) => {
       console.log(products);
       this.products.set(products.products);
       console.log(this.products);
+      this.totalCount.set(products.totalCount);
     });
   }
 
@@ -97,8 +118,12 @@ export class ListProducts {
     this.confirmDelete(product);
   }
 
-  onFilterProducts(filter: any) {
+  onFilterProducts(filter: FilterProductsRequestDto) {
     console.log('Filter products', filter);
+    this._filter.set(filter);
+    filter.page = 1;
+    filter.pageSize = this.size();
+    this.first.set(0);
     this.onLoadProducts(filter);
   }
 
@@ -118,20 +143,32 @@ export class ListProducts {
         label: 'Save',
       },
       accept: () => {
-        this.productService.DeleteProduct(product.id).subscribe(() => {
-          this.products.set(this.products().filter((p) => p.id !== product.id));
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Confirmed',
-            detail: 'You have accepted',
-          });
+        this.productService.DeleteProduct(product.id).subscribe({
+          next: (res) => {
+            this.products.set(this.products().filter((p) => p.id !== product.id));
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Info',
+              detail: 'Producto eliminado correctamente',
+              life: 3000,
+            });
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error no se elimino el producto',
+              life: 3000,
+            });
+            console.error('Error deleting product', err);
+          }
         });
       },
       reject: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Rejected',
-          detail: 'You have rejected',
+          detail: 'Error no se elimino el producto',
           life: 3000,
         });
       },

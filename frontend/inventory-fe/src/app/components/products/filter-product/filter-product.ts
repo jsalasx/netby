@@ -1,5 +1,6 @@
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FilterProductsRequestDto } from '@app/services/products/product-service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -14,7 +15,7 @@ import { TextareaModule } from 'primeng/textarea';
 })
 export class FilterProduct {
 
-  filterToFetch = output<any>();
+  filterToFetch = output<FilterProductsRequestDto>();
 
 
   productFilterForm = new FormGroup({
@@ -33,7 +34,23 @@ export class FilterProduct {
 
   onFilter() {
     console.log(this.productFilterForm.value);
-    this.filterToFetch.emit(this.productFilterForm.value);
+
+
+    const filter: FilterProductsRequestDto = {
+      id: this.productFilterForm.value.id || undefined,
+      name: this.productFilterForm.value.name || undefined,
+      code: this.productFilterForm.value.code || undefined,
+      category: this.productFilterForm.value.category || undefined,
+      priceGreaterThanEqual: this.productFilterForm.value.priceGreaterThanEqual ? Number(this.productFilterForm.value.priceGreaterThanEqual)*100 : undefined,
+      priceLessThanEqual: this.productFilterForm.value.priceLessThan ? Number(this.productFilterForm.value.priceLessThan)*100 : undefined,
+      priceEqual: this.productFilterForm.value.priceEqual ? Number(this.productFilterForm.value.priceEqual)*100 : undefined,
+      stockGreaterThanEqual: this.productFilterForm.value.stockGreaterThanEqual ? Number(this.productFilterForm.value.stockGreaterThanEqual)*100 : undefined,
+      stockLessThanEqual: this.productFilterForm.value.stockLessThan ? Number(this.productFilterForm.value.stockLessThan)*100 : undefined,
+      stockEqual: this.productFilterForm.value.stockEqual ? Number(this.productFilterForm.value.stockEqual)*100 : undefined,
+
+    }
+
+    this.filterToFetch.emit(filter);
   }
 
    onClear() {

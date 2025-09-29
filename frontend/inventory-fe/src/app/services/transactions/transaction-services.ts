@@ -26,7 +26,7 @@ export interface FilterTransactionsRequestDto {
   createdAfterEqual?: Date;
   createdBefore?: Date;
   page?: number;
-  size?: number;
+  pageSize?: number;
 
 }
 

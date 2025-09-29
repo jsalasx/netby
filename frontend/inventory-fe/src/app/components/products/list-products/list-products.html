@@ -16,11 +16,18 @@
 <p-contextmenu #cm [model]="menuItems" (onHide)="selectedProduct.set(undefined)" />
 <p-table
   [value]="products()"
+  [paginator]="true"
+  [totalRecords]="totalCount()"
+  [first]="first()"
+  [rows]="size()"
   [(contextMenuSelection)]="selectedProduct"
   [contextMenu]="cm"
   dataKey="id"
   [tableStyle]="{ 'min-width': '50rem' }"
   selectionMode="single"
+  [rowsPerPageOptions]="[2, 10, 25, 50]"
+  [lazy]="true"
+  (onPage)="pageChange($event)"
 >
   <ng-template #header>
     <tr>

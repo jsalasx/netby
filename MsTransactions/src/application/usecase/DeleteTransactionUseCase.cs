@@ -68,7 +68,7 @@ public class DeleteTransactionUseCase
             throw new Exception("The total amount is not valid");
         }
 
-
+        transaction.Type = TransactionTypeEnum.Return;
         await _transactionRepository.AddAsync(transaction, ct);
         return true;
     }

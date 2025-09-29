@@ -79,7 +79,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(myAllowSpecificOrigins);
-app.UseJwtMiddleware();
+//app.UseJwtMiddleware();
 app.UseHttpsRedirection();
 
 // Map controllers

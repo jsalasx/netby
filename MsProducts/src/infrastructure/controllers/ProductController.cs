@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using MsProducts.Application.UseCase;
 using MsProducts.Infrastructure.Mappers;
 using Shared.Dto;
-
+using Shared.Application.Service;
 
 namespace MsProducts.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[JwtAuthorize]
 public class ProductsController : ControllerBase
 {
     private readonly AddProductUseCase _addProductUseCase;

@@ -40,10 +40,40 @@ export class ListTransactions {
   _onClickView = signal(false);
   transactionService = inject(TransactionServices);
   transactions = signal<TransactionResponseDto[]>([]);
+  page = signal(1);
+  size = signal(
+    10);
+  totalCount = signal(0);
+  first = signal(0);
+  last = signal(2);
+  _filter = signal<FilterTransactionsRequestDto>({});
 
   selectedTransaction = signal<TransactionResponseDto | undefined>(undefined);
   messageService = inject(MessageService);
   confirmationService = inject(ConfirmationService);
+
+  next() {
+    this.first.set(this.first() + this.size());
+    this.pageChange({ first: this.first(), rows: this.size() });
+  }
+
+  prev() {
+    this.first.set(this.first() - this.size());
+    this.pageChange({ first: this.first(), rows: this.size() });
+  }
+
+  reset() {
+    this.first.set(0);
+    this.pageChange({ first: this.first(), rows: this.size() });
+  }
+
+  isLastPage(): boolean {
+    return this.first() + this.size() >= this.totalCount();
+  }
+
+  isFirstPage(): boolean {
+    return this.first() === 0;
+  }
 
   menuItems: MenuItem[] = [
     {
@@ -62,6 +92,19 @@ export class ListTransactions {
     this.onLoadTransactions();
   }
 
+  pageChange(event: any) {
+    console.log(event);
+    this.first.set(event.first);
+    if (event.first === 0) {
+
+      this.page.set(1);
+    } else {
+      this.page.set(event.first / event.rows + 1);
+    }
+    this.size.set(event.rows);
+    this.onLoadTransactions(this._filter());
+  }
+
   getUserTimezone(): string {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
@@ -72,18 +115,23 @@ export class ListTransactions {
   }
 
   onFilterTransactions(filter: FilterTransactionsRequestDto) {
+    this._filter.set(filter);
+    filter.page = 1;
+    filter.pageSize = this.size();
+    this.first.set(0);
     this.onLoadTransactions(filter);
   }
 
   onLoadTransactions(filterAux?: FilterTransactionsRequestDto) {
     const filter: FilterTransactionsRequestDto = {
-      page: 1,
-      size: 10,
+      page: this.page(),
+      pageSize: this.size(),
       ...ObjectUtils.cleanObject(filterAux ?? {}),
     };
     this.transactionService.getFilteredTransactions(filter).subscribe((data) => {
       console.log(data);
       this.transactions.set(data.transactions);
+      this.totalCount.set(data.totalCount);
       console.log(this.transactions);
     });
   }
@@ -132,20 +180,29 @@ export class ListTransactions {
         label: 'Save',
       },
       accept: () => {
-        this.transactionService.deleteTransaction(transaction.id).subscribe(() => {
-          this.transactions.set(this.transactions().filter((t) => t.id !== transaction.id));
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Confirmed',
-            detail: 'You have accepted',
+        this.transactionService.deleteTransaction(transaction.id).subscribe({
+          next: (res) => {
+            this.transactions.set(this.transactions().filter((t) => t.id !== transaction.id));
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Confirmed',
+            detail: 'Transaction Eliminada',
           });
+        },          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error no se elimino la transacción',
+              life: 3000,
+            });
+          },
         });
       },
       reject: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Rejected',
-          detail: 'You have rejected',
+          detail: 'No se acepto la eliminación',
           life: 3000,
         });
       },

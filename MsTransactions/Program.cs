@@ -20,9 +20,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("*") // URL de tu frontend Angular
+            policy.WithOrigins("http://localhost:4200") // URL de tu frontend Angular
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
 });
 
@@ -60,9 +61,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(myAllowSpecificOrigins);
 app.UseJwtMiddleware();
 app.UseHttpsRedirection();
-app.UseCors(myAllowSpecificOrigins);
+
 // Map controllers
 app.MapControllers();
 

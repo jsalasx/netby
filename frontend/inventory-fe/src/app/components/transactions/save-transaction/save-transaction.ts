@@ -15,6 +15,7 @@ import { ChooseProducts } from '../choose-products/choose-products';
 import { Transaction, TransactionDetail } from '../transaction.model';
 import { MessageService } from 'primeng/api';
 import { TransactionServices } from '@app/services/transactions/transaction-services';
+import { Toast } from "primeng/toast";
 
 @Component({
   selector: 'app-save-transaction',
@@ -28,7 +29,8 @@ import { TransactionServices } from '@app/services/transactions/transaction-serv
     SelectModule,
     CommonModule,
     ChooseProducts,
-  ],
+    Toast
+],
   templateUrl: './save-transaction.html',
   styleUrl: './save-transaction.css',
   providers: [MessageService]
@@ -66,6 +68,7 @@ export class SaveTransaction {
       }
     });
     this.transformToTransaction();
+    this.messageService.add({severity:'info', summary: 'Products Selected', detail: `${products.length} productos seleccionados.`});
   }
 
   transformToTransaction() {
@@ -127,6 +130,7 @@ export class SaveTransaction {
 
   // Eliminar un detalle
   removeDetail(index: number) {
+    this.messageService.add({severity:'info', summary: 'Detail Removed', detail: `Detalle ${index + 1} eliminado.`});
     this.details.removeAt(index);
   }
 
@@ -199,12 +203,12 @@ export class SaveTransaction {
       comment: transactionToSave.comment || ""
     }).subscribe({
       next: (response) => {
-        this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction saved successfully.'});
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction guardada correctamente.'});
         console.log('Transaction saved successfully:', response);
         this.visible.set(false);
       },
       error: (error) => {
-          this.messageService.add({severity:'error', summary: 'Error', detail: 'Failed to save transaction.'});
+          this.messageService.add({severity:'error', summary: 'Error', detail: 'Error al guardar la transacción.'});
         console.error('Error saving transaction:', error);
       }
     });

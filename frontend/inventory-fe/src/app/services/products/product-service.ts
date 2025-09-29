@@ -13,8 +13,8 @@ export interface FilterProductsRequestDto {
   stockGreaterThanEqual?: number;
   stockLessThanEqual?: number;
   stockEqual?: number;
-  page: number;
-  size: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ProductResponseDto {

@@ -3,7 +3,7 @@
   <app-save-transaction></app-save-transaction>
 </div>
 <div class="flex justify-center">
-<app-filter-transactions (filterToFetch)="onFilterTransactions($event)"></app-filter-transactions>
+  <app-filter-transactions (filterToFetch)="onFilterTransactions($event)"></app-filter-transactions>
 </div>
 
 <app-get-transaction
@@ -14,13 +14,38 @@
 
 <p-contextmenu #cm [model]="menuItems" />
 <div class="p-5">
+  <div class="mb-4">
+    <p-button
+      type="button"
+      icon="pi pi-chevron-left"
+      (click)="prev()"
+      [disabled]="isFirstPage()"
+      text
+    />
+    <p-button type="button" icon="pi pi-refresh" (click)="reset()" text />
+    <p-button
+      type="button"
+      icon="pi pi-chevron-right"
+      (click)="next()"
+      [disabled]="isLastPage()"
+      text
+    />
+  </div>
   <p-table
     [value]="transactions()"
+    [paginator]="true"
+    [totalRecords]="totalCount()"
+    [first]="first()"
+    [rows]="size()"
     [(contextMenuSelection)]="selectedTransaction"
     [contextMenu]="cm"
     dataKey="id"
+    [lazy]="true"
     [tableStyle]="{ 'min-width': '50rem' }"
     selectionMode="single"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [lazy]="true"
+    (onPage)="pageChange($event)"
   >
     <ng-template #header>
       <tr>
@@ -42,7 +67,7 @@
         <td>{{ transaction.type | typeTransactionType }}</td>
         <td>{{ transaction.totalAmount | priceFormatTotal }}</td>
         <td>{{ transaction.comment }}</td>
-        <td>{{ transaction.createdAt | date:'medium': 'America/Guayaquil' }}</td>
+        <td>{{ transaction.createdAt | date : 'medium' : 'America/Guayaquil' }}</td>
       </tr>
     </ng-template>
   </p-table>

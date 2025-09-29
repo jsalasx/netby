@@ -35,6 +35,13 @@ export class ChooseProducts {
 
   productsToEmit = output<ProductDto[]>();
 
+  page = signal(1);
+  size = signal(2);
+  totalCount = signal(0);
+  first = signal(0);
+  last = signal(2);
+  _filter = signal<FilterProductsRequestDto>({});
+
 
   loadProductsToTransaction() {
     console.log(this.selectedProducts());
@@ -42,16 +49,32 @@ export class ChooseProducts {
     this.closeDialog();
   }
 
+  pageChange(event: any) {
+    console.log(event);
+    this.first.set(event.first);
+    if (event.first === 0) {
+
+      this.page.set(1);
+    } else {
+      this.page.set((event.first / event.rows) + 1);
+    }
+    this.size.set(event.rows);
+    this.onLoadProducts(this._filter());
+  }
+
+
   onLoadProducts(filterAux?: any) {
     const filter: FilterProductsRequestDto = {
-      page: 1,
-      size: 10,
       ...ObjectUtils.cleanObject(filterAux ?? {}),
     };
+    filter.page = this.page();
+    filter.pageSize = this.size();
+
     this.productService.getFilteredProducts(filter).subscribe((products) => {
       console.log(products);
       this.productsToShowTable.set(products.products);
       console.log(this.productsToShowTable);
+      this.totalCount.set(products.totalCount);
     });
   }
 
@@ -86,6 +109,11 @@ export class ChooseProducts {
 
   onFilterProducts(filter: any) {
     console.log('Filter received in choose-products:', filter);
+    this.onLoadProducts(filter);
+    this._filter.set(filter);
+    filter.page = 1;
+    filter.pageSize = this.size();
+    this.first.set(0);
     this.onLoadProducts(filter);
   }
 
