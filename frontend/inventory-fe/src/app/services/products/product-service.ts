@@ -1,6 +1,6 @@
-import { SaveProduct } from './../../components/products/save-product/save-product';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '@app/config/enviroment';
 
 export interface FilterProductsRequestDto {
   id?: string;
@@ -64,7 +64,7 @@ export class ProductService {
 
   private http = inject(HttpClient);
 
-  private baseUrl = 'http://netby.drkapp.com/api/products';
+  private baseUrl = environment.apiUrl + '/api/products';
 
 
 

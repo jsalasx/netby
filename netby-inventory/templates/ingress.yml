@@ -9,9 +9,9 @@ spec:
   ingressClassName: kong
   tls:
   - hosts:
-    - netby.drkapp.com
+    - netby.drkapps.com
   rules:
-  - host: netby.drkapp.com
+  - host: netby.drkapps.com
     http:
       paths:
       - path: "/api/products"

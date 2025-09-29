@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: ms-auth
-        image: msauth:latest
-        imagePullPolicy: Never
+        image: "{{ .Values.netby.msauth.image.repository }}:{{ .Values.netby.msauth.image.tag }}"
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         resources:

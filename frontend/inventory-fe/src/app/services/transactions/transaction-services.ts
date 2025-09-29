@@ -2,6 +2,7 @@ import { Transaction } from './../../components/transactions/transaction.model';
 import { FilterTransactions } from './../../components/transactions/filter-transactions/filter-transactions';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '@app/config/enviroment';
 
 export interface SaveTransactionRequestDto {
   type: number;
@@ -64,7 +65,7 @@ export class TransactionServices {
 
   private http = inject(HttpClient);
 
-  private baseUrl = 'http://netby.drkapp.com/api/transaction';
+  private baseUrl = environment.apiUrl + '/api/transaction';
 
   saveTransaction(req: SaveTransactionRequestDto) {
     return this.http.post(`${this.baseUrl}`, req);

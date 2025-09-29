@@ -10,7 +10,7 @@ export class AuthService {
 
   getToken(): Promise<string | null> {
     return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('accessToken');
       if (!token) {
         reject('No token found');
         return;

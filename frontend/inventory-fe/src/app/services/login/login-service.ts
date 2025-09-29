@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '@app/config/enviroment';
 
 export interface LoginRequestDto {
   email: string;
@@ -31,7 +32,7 @@ export class LoginService {
 
   private http = inject(HttpClient);
 
-  private baseUrl = 'http://netby.drkapp.com/api/user';
+  private baseUrl = environment.apiUrl + '/api/user';
 
 
 

@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: ms-products
-        image: msproducts:latest
-        imagePullPolicy: Never
+        image: "{{ .Values.netby.msproducts.image.repository }}:{{ .Values.netby.msproducts.image.tag }}"
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         resources:
