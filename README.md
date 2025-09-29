@@ -1,0 +1,368 @@
+# 🏪 NetBy - Sistema de Gestión de Inventario
+
+[![Angular](https://img.shields.io/badge/Angular-20.3.0-red)](https://angular.io/)
+[![.NET](https://img.shields.io/badge/.NET-8.0-blue)](https://dotnet.microsoft.com/)
+[![Docker](https://img.shields.io/badge/Docker-containerized-blue)](https://www.docker.com/)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-orchestrated-326CE5)](https://kubernetes.io/)
+[![Helm](https://img.shields.io/badge/Helm-packaged-0F1689)](https://helm.sh/)
+
+Un sistema completo de gestión de inventario construido con arquitectura de microservicios, desplegado en Kubernetes usando Helm para el backend y Docker para el frontend.
+
+## 🚀 Descripción del Proyecto
+
+NetBy es una aplicación moderna de gestión de inventario que implementa:
+
+- **🔐 Autenticación y Autorización** - Microservicio de gestión de usuarios
+- **📦 Gestión de Productos** - CRUD completo con filtros avanzados y control de stock
+- **💳 Gestión de Transacciones** - Sistema de transacciones con control de concurrencia
+- **🎨 Frontend Moderno** - Aplicación Angular con TailwindCSS y PrimeNG
+- **🐳 Containerización** - Docker y Kubernetes ready
+- **⚡ Cache Distribuido** - Redis para optimización de rendimiento
+
+## 🏗️ Arquitectura
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    🌐 Frontend (Angular)                    │
+│                   Docker Container                          │
+└─────────────────────────────────────────────────────────────┘
+                               │
+                    ┌─────────────────┐
+                    │   🚪 Kong       │
+                    │   API Gateway   │
+                    └─────────────────┘
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        │                      │                      │
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│   🔐 MsAuth   │    │ 📦 MsProducts │    │💳 MsTransactions│
+│   (.NET 8.0)  │    │   (.NET 8.0)  │    │   (.NET 8.0)  │
+│  Helm Chart   │    │  Helm Chart   │    │  Helm Chart   │
+└──────────────┘    └──────────────┘    └──────────────┘
+        │                      │                      │
+        └──────────────────────┼──────────────────────┘
+                               │
+                    ┌─────────────────┐
+                    │   🗄️ SQL Server │
+                    │      Redis      │
+                    └─────────────────┘
+```
+
+### 🛠️ Stack Tecnológico
+
+#### Backend
+- **.NET 8.0** - Framework principal
+- **Entity Framework Core** - ORM
+- **SQL Server** - Base de datos principal
+- **Redis** - Cache y bloqueos distribuidos
+- **RedLock** - Control de concurrencia
+- **Swagger/OpenAPI** - Documentación de APIs
+
+#### Frontend  
+- **Angular 20.3.0** - Framework SPA
+- **TailwindCSS 4.1.13** - Estilos utilitarios
+- **PrimeNG 20.1.2** - Componentes UI
+- **RxJS** - Programación reactiva
+- **TypeScript 5.9.2** - Tipado estático
+
+#### DevOps & Infraestructura
+- **Docker** - Containerización
+- **Kubernetes** - Orquestación
+- **Helm 3.x** - Gestión de paquetes K8s
+- **Kong** - API Gateway
+- **Makefile** - Automatización de tareas
+
+## 📋 Prerequisitos
+
+### Herramientas Requeridas
+- **Docker** >= 20.10
+- **Kubernetes** >= 1.20 (Minikube, Docker Desktop, o cluster)
+- **Helm** >= 3.8
+- **kubectl** configurado
+- **Node.js** >= 20 (para desarrollo frontend)
+- **.NET SDK** >= 8.0 (para desarrollo backend)
+
+### Verificar Instalación
+```bash
+# Verificar Docker
+docker --version
+
+# Verificar Kubernetes
+kubectl version --client
+
+# Verificar Helm
+helm version
+
+# Verificar acceso al cluster
+kubectl cluster-info
+```
+
+## 🚀 Guía de Despliegue
+
+### 1. 📥 Clonar el Repositorio
+
+```bash
+git clone https://github.com/jsalasx/netby.git
+cd netby
+```
+
+### 2. 🗄️ Configurar Infraestructura Base
+
+#### Instalar Redis
+```bash
+# Agregar repositorio Bitnami
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# Instalar Redis
+make create-redis
+```
+
+#### Instalar Kong API Gateway
+```bash
+# Instalar Kong
+make kong-install
+```
+
+### 3. 🐳 Construir y Desplegar Backend (Helm)
+
+#### Opción A: Despliegue Completo
+```bash
+# Construir todas las imágenes e instalar con Helm
+make helm-install
+```
+
+#### Opción B: Despliegue Individual por Microservicio
+
+```bash
+# Construir y desplegar MsProducts
+make dp  # build-msproducts + restart-msproducts
+
+# Construir y desplegar MsAuth  
+make da  # build-msauth + restart-msauth
+
+# Construir y desplegar MsTransactions
+make dt  # build-mstransactions + restart-mstransactions
+```
+
+### 4. 🎨 Desplegar Frontend (Docker)
+
+#### Construir Imagen Docker
+```bash
+cd frontend/inventory-fe
+
+# Construir la imagen
+docker build -t inventory-fe:latest .
+```
+
+#### Desplegar en Kubernetes
+```bash
+# Crear deployment
+kubectl create deployment inventory-fe --image=inventory-fe:latest
+
+# Exponer el servicio
+kubectl expose deployment inventory-fe --port=80 --target-port=80 --type=LoadBalancer
+
+# Obtener URL del servicio
+kubectl get services inventory-fe
+```
+
+### 5. ✅ Verificar Despliegue
+
+```bash
+# Verificar pods del backend
+kubectl get pods -n netby-inventory
+
+# Verificar servicios
+kubectl get services -n netby-inventory
+
+# Verificar frontend
+kubectl get pods,services -l app=inventory-fe
+
+# Ver logs si hay problemas
+kubectl logs -l app=ms-products -n netby-inventory
+```
+
+## 🔧 Comandos de Gestión
+
+### Backend (Helm)
+```bash
+# Actualizar despliegue
+make helm-upgrade
+
+# Desinstalar completamente
+make helm-uninstall
+
+# Ver status
+helm status netby-inventory -n netby-inventory
+```
+
+### Desarrollo Local
+```bash
+# Ejecutar backend en desarrollo
+cd MsProducts
+dotnet run
+
+# Ejecutar frontend en desarrollo  
+cd frontend/inventory-fe
+npm install
+ng serve
+```
+
+## 🌐 Acceso a la Aplicación
+
+### URLs por Defecto
+- **Frontend**: `http://localhost` (si usas LoadBalancer)
+- **API Products**: `http://localhost/api/products`
+- **API Auth**: `http://localhost/api/auth`  
+- **API Transactions**: `http://localhost/api/transactions`
+- **Swagger Products**: `http://localhost/swagger` (en desarrollo)
+
+### Port Forwarding (Alternativo)
+```bash
+# Frontend
+kubectl port-forward service/inventory-fe 8080:80
+
+# Backend APIs
+kubectl port-forward service/ms-products 8081:80 -n netby-inventory
+kubectl port-forward service/ms-auth 8082:80 -n netby-inventory
+kubectl port-forward service/ms-transactions 8083:80 -n netby-inventory
+```
+
+## 📊 Características Principales
+
+### 🔐 Autenticación (MsAuth)
+- Registro y login de usuarios
+- JWT tokens
+- Gestión de sesiones
+
+### 📦 Gestión de Productos (MsProducts)  
+- CRUD completo de productos
+- Filtros avanzados (nombre, categoría, precio, stock)
+- Paginación
+- Control de stock con RedLock
+- Validaciones de negocio
+
+### 💳 Transacciones (MsTransactions)
+- Sistema de transacciones
+- Control de concurrencia
+- Historial de operaciones
+
+### 🎨 Frontend Features
+- Dashboard responsive
+- Gestión de productos con DataTable
+- Formularios reactivos
+- Navegación con routing
+- Componentes PrimeNG
+- Estilos TailwindCSS
+
+## 🐛 Troubleshooting
+
+### Problemas Comunes
+
+#### 1. Pods en estado `ImagePullBackOff`
+```bash
+# Verificar que las imágenes se construyeron
+docker images | grep -E "(msproducts|msauth|mstransactions|inventory-fe)"
+
+# Reconstruir imagen
+make build-msproducts  # o el microservicio correspondiente
+```
+
+#### 2. Error de conexión a base de datos
+```bash
+# Verificar SQL Server
+kubectl get pods -n netby-inventory | grep sql
+
+# Verificar variables de entorno
+kubectl describe pod <pod-name> -n netby-inventory
+```
+
+#### 3. Frontend no carga
+```bash
+# Verificar nginx config
+kubectl exec -it deployment/inventory-fe -- cat /etc/nginx/conf.d/default.conf
+
+# Ver logs de nginx
+kubectl logs deployment/inventory-fe
+```
+
+#### 4. Problemas con Redis
+```bash
+# Verificar Redis
+kubectl get pods | grep redis
+
+# Test conexión
+kubectl exec -it my-redis-master-0 -- redis-cli ping
+```
+
+### Logs y Debugging
+```bash
+# Logs de microservicios
+kubectl logs -f deployment/ms-products -n netby-inventory
+kubectl logs -f deployment/ms-auth -n netby-inventory
+kubectl logs -f deployment/ms-transactions -n netby-inventory
+
+# Logs de frontend
+kubectl logs -f deployment/inventory-fe
+
+# Describir recursos
+kubectl describe deployment ms-products -n netby-inventory
+```
+
+## 🔄 CI/CD y Automatización
+
+### Scripts Make Disponibles
+```bash
+make create-redis      # Instalar Redis
+make kong-install      # Instalar Kong Gateway
+make helm-install      # Instalar aplicación completa
+make helm-upgrade      # Actualizar despliegue
+make helm-uninstall    # Desinstalar aplicación
+make dp               # Deploy MsProducts
+make da               # Deploy MsAuth  
+make dt               # Deploy MsTransactions
+```
+
+## 📝 Variables de Entorno
+
+### Backend (.NET)
+```bash
+DB_CONNECTION=Server=...;Database=...;
+REDIS_CONNECTION=localhost:6379
+ASPNETCORE_ENVIRONMENT=Production
+```
+
+### Frontend (Angular)
+```bash
+API_BASE_URL=http://localhost/api
+ENVIRONMENT=production
+```
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crear una rama feature (`git checkout -b feature/AmazingFeature`)
+3. Commit los cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles.
+
+## 👥 Equipo
+
+- **Desarrollador Principal**: [@jsalasx](https://github.com/jsalasx)
+
+## 🆘 Soporte
+
+Si encuentras algún problema o tienes preguntas:
+
+1. Revisa la sección [Troubleshooting](#🐛-troubleshooting)
+2. Busca en los [Issues existentes](https://github.com/jsalasx/netby/issues)
+3. Crea un [nuevo Issue](https://github.com/jsalasx/netby/issues/new) si es necesario
+
+---
+
+⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!
