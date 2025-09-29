@@ -126,24 +126,35 @@ make kong-install
 
 ### 3. 🐳 Construir y Desplegar Backend (Helm)
 
-#### Opción A: Despliegue Completo
+### Contruir las imagenes
+
+## Imagen de Microservicio de Productos
 ```bash
-# Construir todas las imágenes e instalar con Helm
+# Contruir imagenes 
+make build-msproducts
+```
+## Imagen de Microservicio de Transaciones
+```bash
+# Contruir imagenes 
+make build-mstransactions
+```
+
+## Imagen de Microservicio de Autenticacion
+```bash
+# Contruir imagenes 
+make build-msauth
+```
+
+### Opcional Subir a un Container Registry 
+
+Si el despligue es en la nube
+
+#### Despliegue de Manifiestos de Kubernetes
+```bash
+# instalar los manifiestos con Helm
 make helm-install
 ```
 
-#### Opción B: Despliegue Individual por Microservicio
-
-```bash
-# Construir y desplegar MsProducts
-make dp  # build-msproducts + restart-msproducts
-
-# Construir y desplegar MsAuth  
-make da  # build-msauth + restart-msauth
-
-# Construir y desplegar MsTransactions
-make dt  # build-mstransactions + restart-mstransactions
-```
 
 ### 4. 🎨 Desplegar Frontend (Docker)
 
@@ -155,16 +166,10 @@ cd frontend/inventory-fe
 docker build -t inventory-fe:latest .
 ```
 
-#### Desplegar en Kubernetes
 ```bash
-# Crear deployment
-kubectl create deployment inventory-fe --image=inventory-fe:latest
 
-# Exponer el servicio
-kubectl expose deployment inventory-fe --port=80 --target-port=80 --type=LoadBalancer
-
-# Obtener URL del servicio
-kubectl get services inventory-fe
+# Construir la imagen
+docker run -d -p 4200:80 --name inventory-fe inventory-fe:latest
 ```
 
 ### 5. ✅ Verificar Despliegue
@@ -212,22 +217,11 @@ ng serve
 ## 🌐 Acceso a la Aplicación
 
 ### URLs por Defecto
-- **Frontend**: `http://localhost` (si usas LoadBalancer)
+- **Frontend**: `http://localhost:4200` (si usas LoadBalancer)
 - **API Products**: `http://localhost/api/products`
 - **API Auth**: `http://localhost/api/auth`  
 - **API Transactions**: `http://localhost/api/transactions`
 - **Swagger Products**: `http://localhost/swagger` (en desarrollo)
-
-### Port Forwarding (Alternativo)
-```bash
-# Frontend
-kubectl port-forward service/inventory-fe 8080:80
-
-# Backend APIs
-kubectl port-forward service/ms-products 8081:80 -n netby-inventory
-kubectl port-forward service/ms-auth 8082:80 -n netby-inventory
-kubectl port-forward service/ms-transactions 8083:80 -n netby-inventory
-```
 
 ## 📊 Características Principales
 
@@ -278,15 +272,6 @@ kubectl get pods -n netby-inventory | grep sql
 kubectl describe pod <pod-name> -n netby-inventory
 ```
 
-#### 3. Frontend no carga
-```bash
-# Verificar nginx config
-kubectl exec -it deployment/inventory-fe -- cat /etc/nginx/conf.d/default.conf
-
-# Ver logs de nginx
-kubectl logs deployment/inventory-fe
-```
-
 #### 4. Problemas con Redis
 ```bash
 # Verificar Redis
@@ -316,12 +301,10 @@ kubectl describe deployment ms-products -n netby-inventory
 ```bash
 make create-redis      # Instalar Redis
 make kong-install      # Instalar Kong Gateway
+make build-all
 make helm-install      # Instalar aplicación completa
 make helm-upgrade      # Actualizar despliegue
 make helm-uninstall    # Desinstalar aplicación
-make dp               # Deploy MsProducts
-make da               # Deploy MsAuth  
-make dt               # Deploy MsTransactions
 ```
 
 ## 📝 Variables de Entorno
@@ -335,7 +318,7 @@ ASPNETCORE_ENVIRONMENT=Production
 
 ### Frontend (Angular)
 ```bash
-API_BASE_URL=http://localhost/api
+API_BASE_URL=http://localhost:4200/api
 ENVIRONMENT=production
 ```
 

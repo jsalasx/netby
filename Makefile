@@ -55,3 +55,8 @@ docker-push-all:
 	docker push drkappspruebaregistry.azurecr.io/netby/msauth:latest
 	docker tag mstransactions:latest drkappspruebaregistry.azurecr.io/netby/mstransactions:latest
 	docker push drkappspruebaregistry.azurecr.io/netby/mstransactions:latest
+
+build-all:
+	make build-msproducts
+	make build-msauth
+	make build-mstransactions
