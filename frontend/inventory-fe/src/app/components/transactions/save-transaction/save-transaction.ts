@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   ProductDto,
@@ -10,7 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
-import { TransactionTypeOption, TransactionTypeOptions } from '@app/enums/transaction-types.enum';
+import { TransactionTypeOption, TransactionTypeOptions, TransactionTypeOptionsToSave } from '@app/enums/transaction-types.enum';
 import { ChooseProducts } from '../choose-products/choose-products';
 import { Transaction, TransactionDetail } from '../transaction.model';
 import { MessageService } from 'primeng/api';
@@ -37,11 +37,13 @@ import { Toast } from "primeng/toast";
 })
 export class SaveTransaction {
   visible = signal(false);
-  transactionTypes = TransactionTypeOptions;
+  saved = output<void>();
+  transactionTypes = TransactionTypeOptionsToSave;
   selectedTransactionType: TransactionTypeOption | undefined = undefined;
   messageService = inject(MessageService);
   transactionFinal = signal<Transaction | undefined>(undefined);
   transactionService = inject(TransactionServices);
+  _isTypeSelected = signal(false);
 
   updateTotalPrice(index: number) {
     const detailGroup = this.details.at(index) as FormGroup;
@@ -49,6 +51,15 @@ export class SaveTransaction {
     const unitPrice = detailGroup.get('unitPrice')?.value || 0;
     detailGroup.patchValue({ totalPrice: quantity * unitPrice });
     this.transformToTransaction();
+  }
+
+  onTypeChange(event: any) {
+    const selectedKey = event.value;
+    if (selectedKey) {
+      this._isTypeSelected.set(true);
+      this.selectedTransactionType = this.transactionTypes.find(t => t.key === selectedKey);
+
+    }
   }
 
   onProductsSelected(products: ProductDto[]) {
@@ -206,6 +217,7 @@ export class SaveTransaction {
         this.messageService.add({severity:'success', summary: 'Success', detail: 'Transaction guardada correctamente.'});
         console.log('Transaction saved successfully:', response);
         this.visible.set(false);
+        this.saved.emit();
       },
       error: (error) => {
           this.messageService.add({severity:'error', summary: 'Error', detail: 'Error al guardar la transacción.'});

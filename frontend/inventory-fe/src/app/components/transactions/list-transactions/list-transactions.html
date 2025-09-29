@@ -1,6 +1,6 @@
 <div class="flex justify-center gap-5 py-5">
   <p-button label="Cargar" (click)="onLoadTransactions()" />
-  <app-save-transaction></app-save-transaction>
+  <app-save-transaction (saved)="onTransactionSaved()"></app-save-transaction>
 </div>
 <div class="flex justify-center">
   <app-filter-transactions (filterToFetch)="onFilterTransactions($event)"></app-filter-transactions>

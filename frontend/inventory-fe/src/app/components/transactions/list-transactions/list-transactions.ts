@@ -92,6 +92,10 @@ export class ListTransactions {
     this.onLoadTransactions();
   }
 
+  onTransactionSaved() {
+    this.onLoadTransactions(this._filter());
+  }
+
   pageChange(event: any) {
     console.log(event);
     this.first.set(event.first);

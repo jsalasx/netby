@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FilterProduct } from '@app/components/products/filter-product/filter-product';
+import {
+  TransactionTypeEnum,
+  TransactionTypeOption,
+  validStockByTransactionType,
+} from '@app/enums/transaction-types.enum';
 import { PriceFormatPipe } from '@app/pipes/price/price-format-pipe';
 import {
   FilterProductsRequestDto,
@@ -18,14 +23,25 @@ import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-choose-products',
-  imports: [FilterProduct, ButtonModule, DialogModule, TableModule, PriceFormatPipe, ToastModule, InputNumberModule,
-    CommonModule, FormsModule
+  imports: [
+    FilterProduct,
+    ButtonModule,
+    DialogModule,
+    TableModule,
+    PriceFormatPipe,
+    ToastModule,
+    InputNumberModule,
+    CommonModule,
+    FormsModule,
   ],
   templateUrl: './choose-products.html',
   styleUrl: './choose-products.css',
   providers: [MessageService],
 })
 export class ChooseProducts {
+  isTypeSelected = input(false);
+  typeSelected = input<TransactionTypeOption | undefined>(undefined);
+
   productService = inject(ProductService);
   productsToShowTable = signal<ProductDto[]>([]);
   visible = signal(false);
@@ -36,32 +52,58 @@ export class ChooseProducts {
   productsToEmit = output<ProductDto[]>();
 
   page = signal(1);
-  size = signal(2);
+  size = signal(10);
   totalCount = signal(0);
   first = signal(0);
   last = signal(2);
   _filter = signal<FilterProductsRequestDto>({});
 
-
   loadProductsToTransaction() {
+    console.log('typeSelected', this.typeSelected());
+    console.log('Loading products for transaction...');
     console.log(this.selectedProducts());
-    this.productsToEmit.emit(this.selectedProducts());
-    this.closeDialog();
+    console.log(
+      'Valid stock by transaction type',
+      validStockByTransactionType(this.typeSelected())
+    );
+    if (validStockByTransactionType(this.typeSelected())) {
+      let hasInsufficientStock = false;
+      this.selectedProducts().forEach((p) => {
+        console.log('Producto en selectedProducts', p);
+        if (p.cantidad && p.cantidad > 0) {
+          if (p.cantidad * 100 > p.stock) {
+            hasInsufficientStock = true;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Cantidad Insuficiente',
+              detail: `La cantidad solicitada para ${p.name} excede el stock disponible.`,
+            });
+          }
+        }
+      });
+      if (hasInsufficientStock) {
+        return;
+      } else {
+        this.productsToEmit.emit(this.selectedProducts());
+        this.closeDialog();
+      }
+    } else {
+      this.productsToEmit.emit(this.selectedProducts());
+      this.closeDialog();
+    }
   }
 
   pageChange(event: any) {
     console.log(event);
     this.first.set(event.first);
     if (event.first === 0) {
-
       this.page.set(1);
     } else {
-      this.page.set((event.first / event.rows) + 1);
+      this.page.set(event.first / event.rows + 1);
     }
     this.size.set(event.rows);
     this.onLoadProducts(this._filter());
   }
-
 
   onLoadProducts(filterAux?: any) {
     const filter: FilterProductsRequestDto = {
@@ -106,7 +148,6 @@ export class ChooseProducts {
     });
   }
 
-
   onFilterProducts(filter: any) {
     console.log('Filter received in choose-products:', filter);
     this.onLoadProducts(filter);
@@ -118,7 +159,16 @@ export class ChooseProducts {
   }
 
   showDialog() {
-    this.visible.set(true);
+    if (this.isTypeSelected() === false) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, seleccione un tipo de transacción primero.',
+      });
+      return;
+    } else {
+      this.visible.set(true);
+    }
   }
 
   closeDialog() {

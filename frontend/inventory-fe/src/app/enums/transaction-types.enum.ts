@@ -17,6 +17,19 @@ export const TransactionTypeOptions = [
   { key: TransactionTypeEnum.SaleAdjustment, label: 'Ajuste de venta' }
 ];
 
+export const TransactionTypeOptionsToSave = [
+  { key: TransactionTypeEnum.Purchase, label: 'Compra' },
+  { key: TransactionTypeEnum.Sale, label: 'Venta' },
+  { key: TransactionTypeEnum.PurchaseAdjustment, label: 'Ajuste de compra' },
+  { key: TransactionTypeEnum.SaleAdjustment, label: 'Ajuste de venta' }
+];
+
+export function validStockByTransactionType(type: TransactionTypeOption | undefined): boolean {
+  if (!type) return false;
+  return [TransactionTypeEnum.Sale, TransactionTypeEnum.SaleAdjustment].includes(type.key);
+}
+
+
 export interface TransactionTypeOption {
   key: TransactionTypeEnum;
   label: string;
