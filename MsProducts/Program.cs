@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:4200") // URL de tu frontend Angular
+            policy.WithOrigins("https://netby.drkapps.com") // URL de tu frontend Angular
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();

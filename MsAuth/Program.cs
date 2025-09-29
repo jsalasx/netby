@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("*") // URL de tu frontend Angular
+            policy.WithOrigins("https://netby.drkapps.com") // URL de tu frontend Angular
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

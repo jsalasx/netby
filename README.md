@@ -1,5 +1,12 @@
 # 🏪 NetBy - Sistema de Gestión de Inventario
 
+Link de pruebas 
+> ### 🚀 **¡Prueba NetBy en línea!**
+>
+> [🔗 Accede aquí a la demo](https://netby.drkapps.com/login)
+>
+> _Explora todas las funcionalidades del sistema directamente desde tu navegador._
+
 [![Angular](https://img.shields.io/badge/Angular-20.3.0-red)](https://angular.io/)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue)](https://dotnet.microsoft.com/)
 [![Docker](https://img.shields.io/badge/Docker-containerized-blue)](https://www.docker.com/)

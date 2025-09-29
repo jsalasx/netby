@@ -12,3 +12,6 @@ spec:
     - http01:
         ingress:
           class: kong
+    - http01:
+        ingress:
+          ingressClassName: kong

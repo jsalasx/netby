@@ -7,10 +7,10 @@ metadata:
     kubernetes.io/ingress.class: kong
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  ingressClassName: kong
   tls:
   - hosts:
     - netbyback.drkapps.com
+    secretName: netby-tls
   rules:
   - host: netbyback.drkapps.com
     http:
