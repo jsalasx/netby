@@ -15,6 +15,25 @@ Link de pruebas
 
 Un sistema completo de gestión de inventario construido con arquitectura de microservicios, desplegado en Kubernetes usando Helm para el backend y Docker para el frontend.
 
+## Evidencias
+
+![Login](image.png)
+
+![Guardar Productos](image-1.png)
+
+![Listado](image-2.png)
+
+![Filtrado](image-3.png)
+
+![Editar Producto](image-4.png)
+
+![Listado Transaciones](image-5.png)
+
+![Filtrado Transaciones](image-6.png)
+
+![Creacion Transaciones](image-7.png)
+
+
 ## 🚀 Descripción del Proyecto
 
 NetBy es una aplicación moderna de gestión de inventario que implementa:

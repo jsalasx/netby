@@ -68,6 +68,6 @@ VALUES (
 -- Productos de prueba
 INSERT INTO [Products] (Id, Name, Code, Description, Category, ImageUri, Price, Stock, IsDeleted, CreatedAt, UpdatedAt)
 VALUES
-(NEWID(), 'Laptop Dell', 'PROD001', 'Laptop de 15 pulgadas', 'Tecnología', 'https://picsum.photos/200/300?1', 800, 10, 0, SYSUTCDATETIME(), SYSUTCDATETIME()),
-(NEWID(), 'Auriculares Sony', 'PROD002', 'Auriculares inalámbricos', 'Accesorios', 'https://picsum.photos/200/300?2', 150, 30, 0, SYSUTCDATETIME(), SYSUTCDATETIME()),
-(NEWID(), 'Silla Gamer', 'PROD003', 'Silla ergonómica para oficina/gaming', 'Muebles', 'https://picsum.photos/200/300?3', 200, 5, 0, SYSUTCDATETIME(), SYSUTCDATETIME());
+(NEWID(), 'Laptop Dell', 'PROD001', 'Laptop de 15 pulgadas', 'Tecnología', 'https://picsum.photos/200/300?1', 80000, 1000, 0, SYSUTCDATETIME(), SYSUTCDATETIME()),
+(NEWID(), 'Auriculares Sony', 'PROD002', 'Auriculares inalámbricos', 'Accesorios', 'https://picsum.photos/200/300?2', 15000, 3000, 0, SYSUTCDATETIME(), SYSUTCDATETIME()),
+(NEWID(), 'Silla Gamer', 'PROD003', 'Silla ergonómica para oficina/gaming', 'Muebles', 'https://picsum.photos/200/300?3', 20000, 500, 0, SYSUTCDATETIME(), SYSUTCDATETIME());
