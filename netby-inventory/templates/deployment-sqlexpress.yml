@@ -22,6 +22,10 @@ spec:
       labels:
         app: mssql
     spec:
+      securityContext:
+        fsGroup: 10001
+      nodeSelector:
+        kubernetes.io/arch: amd64
       containers:
       - name: mssql
         image: mcr.microsoft.com/mssql/server:2019-latest

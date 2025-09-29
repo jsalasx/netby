@@ -48,7 +48,6 @@ kong-install:
 	helm install kong kong/ingress -n kong --create-namespace
 
 
-
 docker-push-all:
 	docker tag msproducts:latest drkappspruebaregistry.azurecr.io/netby/msproducts:latest
 	docker push drkappspruebaregistry.azurecr.io/netby/msproducts:latest

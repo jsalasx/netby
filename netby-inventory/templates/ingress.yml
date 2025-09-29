@@ -4,14 +4,15 @@ metadata:
   name: netby-ingress
   namespace: netby-inventory
   annotations:
-    
+    kubernetes.io/ingress.class: kong
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: kong
   tls:
   - hosts:
-    - netby.drkapps.com
+    - netbyback.drkapps.com
   rules:
-  - host: netby.drkapps.com
+  - host: netbyback.drkapps.com
     http:
       paths:
       - path: "/api/products"
