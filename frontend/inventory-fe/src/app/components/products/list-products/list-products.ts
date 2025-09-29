@@ -40,10 +40,9 @@ export class ListProducts {
   messageService = inject(MessageService);
   confirmationService = inject(ConfirmationService);
   page = signal(1);
-  size = signal(2);
+  size = signal(10);
   totalCount = signal(0);
   first = signal(0);
-  last = signal(2);
   _filter = signal<FilterProductsRequestDto>({});
 
   menuItems: MenuItem[] = [
@@ -129,18 +128,18 @@ export class ListProducts {
 
   confirmDelete(product: ProductDto) {
     this.confirmationService.confirm({
-      message: 'Are you sure that you want to proceed?',
-      header: 'Confirmation',
+      message: 'Estas seguro de eliminar el producto ' + product.name + '?',
+      header: 'Confirmación',
       closable: true,
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
-        label: 'Cancel',
+        label: 'Cancelar',
         severity: 'secondary',
         outlined: true,
       },
       acceptButtonProps: {
-        label: 'Save',
+        label: 'Eliminar',
       },
       accept: () => {
         this.productService.DeleteProduct(product.id).subscribe({

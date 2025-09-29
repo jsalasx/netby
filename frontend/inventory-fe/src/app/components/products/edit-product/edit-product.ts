@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductDto, ProductService, UpdateProductRequestDto } from '@app/services/products/product-service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -11,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-edit-product',
   imports: [DialogModule, ButtonModule, InputTextModule, ReactiveFormsModule,
-     InputNumberModule, TextareaModule, ToastModule],
+     InputNumberModule, TextareaModule, ToastModule, CommonModule],
   templateUrl: './edit-product.html',
   styleUrl: './edit-product.css',
   providers: [MessageService]
@@ -25,13 +26,14 @@ export class EditProduct {
   product = input<ProductDto | undefined>();
   onClickEdit = input<boolean>(false);
   messageService = inject(MessageService);
+  fb = inject(FormBuilder);
 
-  productForm = new FormGroup({
-    name: new FormControl(''),
-    description: new FormControl(''),
-    category: new FormControl(''),
-    imageUri: new FormControl(''),
-    price: new FormControl(0),
+  productForm: FormGroup = this.fb.group({
+    name:['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required]],
+    category: ['', [Validators.required]],
+    imageUri: ['', [Validators.pattern(/^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))$/i)]],
+    price: [0, [Validators.required, Validators.min(0.00)]],
   })
 
   constructor() {

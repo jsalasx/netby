@@ -1,4 +1,4 @@
-<div class="flex mb-3 gap-4 justify-center">
+<div class="flex mb-3 gap-4 justify-center bg-white p-4 rounded-4xl">
   <p-button label="Cargar" (click)="onLoadProducts()" />
   <app-save-product (saved)="onProductSaved()"></app-save-product>
   <app-edit-product
@@ -9,65 +9,66 @@
   ></app-edit-product>
 </div>
 
-<div>
+<div class="p-4 bg-white rounded-4xl mb-4">
   <app-filter-product (filterToFetch)="onFilterProducts($event)"></app-filter-product>
 </div>
-
-<p-contextmenu #cm [model]="menuItems" (onHide)="selectedProduct.set(undefined)" />
-<p-table
-  [value]="products()"
-  [paginator]="true"
-  [totalRecords]="totalCount()"
-  [first]="first()"
-  [rows]="size()"
-  [(contextMenuSelection)]="selectedProduct"
-  [contextMenu]="cm"
-  dataKey="id"
-  [tableStyle]="{ 'min-width': '50rem' }"
-  selectionMode="single"
-  [rowsPerPageOptions]="[2, 10, 25, 50]"
-  [lazy]="true"
-  (onPage)="pageChange($event)"
->
-  <ng-template #header>
-    <tr>
-      <th>ID</th>
-      <th>Code</th>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-product>
-    <tr
-      class="cursor-pointer"
-      (dblclick)="onEditProduct(product)"
-      [pSelectableRow]="product"
-      [pContextMenuRow]="product"
-    >
-      <td>{{ product.id }}</td>
-      <td>{{ product.code }}</td>
-      <td>{{ product.name }}</td>
-      <td>{{ product.category }}</td>
-      <td>{{ product.price | priceFormat }}</td>
-      <td>{{ product.stock | priceFormat }}</td>
-      <td>
-        <p-button
-          icon="pi pi-pencil"
-          class="p-button-text p-button-sm"
-          (click)="onEditProduct(product)"
-        ></p-button>
-        <p-button
-          icon="pi pi-trash"
-          class="p-button-text p-button-sm p-button-danger"
-          severity="danger"
-          (click)="onDeleteProduct(product)"
-        ></p-button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+<div class="bg-white p-4 rounded-4xl mt-5">
+  <p-contextmenu #cm [model]="menuItems" (onHide)="selectedProduct.set(undefined)" />
+  <p-table
+    [value]="products()"
+    [paginator]="true"
+    [totalRecords]="totalCount()"
+    [first]="first()"
+    [rows]="size()"
+    [(contextMenuSelection)]="selectedProduct"
+    [contextMenu]="cm"
+    dataKey="id"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    selectionMode="single"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [lazy]="true"
+    (onPage)="pageChange($event)"
+  >
+    <ng-template #header>
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr
+        class="cursor-pointer"
+        (dblclick)="onEditProduct(product)"
+        [pSelectableRow]="product"
+        [pContextMenuRow]="product"
+      >
+        <td>{{ product.id }}</td>
+        <td>{{ product.code }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.price | priceFormat }}</td>
+        <td>{{ product.stock | priceFormat }}</td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="p-button-text p-button-sm"
+            (click)="onEditProduct(product)"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            class="p-button-text p-button-sm p-button-danger"
+            severity="danger"
+            (click)="onDeleteProduct(product)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 <p-toast></p-toast>
 <p-confirmdialog />

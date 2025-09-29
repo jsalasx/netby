@@ -7,70 +7,146 @@
 >
   <form [formGroup]="productForm" (ngSubmit)="onSave()" class="space-y-4">
     <!-- Nombre -->
-    <div class="flex items-center gap-4">
-      <label for="name" class="font-semibold w-32">Nombre *</label>
-      <input pInputText id="name" class="flex-auto" required formControlName="name" />
+    <div class="flex gap-4">
+      <div class="flex flex-col w-32">
+        <label for="name" class="font-semibold">Nombre*</label>
+      </div>
+      <div class="flex flex-col w-full">
+        <input pInputText id="name" class="w-full" required formControlName="name" />
+        <small
+          class="text-red-400"
+          *ngIf="productForm.get('name')?.hasError('required') && productForm.get('name')?.touched"
+        >
+          El nombre es obligatorio.
+        </small>
+        <small
+          class="text-red-400"
+          *ngIf="productForm.get('name')?.hasError('minlength') && productForm.get('name')?.touched"
+        >
+          El nombre debe tener al menos 3 caracteres.
+        </small>
+      </div>
     </div>
-
 
     <!-- Categoría -->
     <div class="flex items-center gap-4">
-      <label for="category" class="font-semibold w-32">Categoría *</label>
-      <input
-        pInputText
-        id="category"
-        class="flex-auto"
-        required
-        formControlName="category"
-        name="category"
-      />
-    </div>
+      <div class="flex flex-col w-32">
+        <label for="category" class="font-semibold">Categoría *</label>
+      </div>
+      <div class="flex flex-col w-full">
+        <input
+          pInputText
+          id="category"
+          class="flex-auto"
+          required
+          formControlName="category"
+          name="category"
+        />
 
+        <small
+          class="text-red-400"
+          *ngIf="
+            productForm.get('category')?.hasError('required') &&
+            productForm.get('category')?.touched
+          "
+        >
+          La categoría es obligatoria.
+        </small>
+        <small
+          class="text-red-400"
+          *ngIf="
+            productForm.get('category')?.hasError('minlength') &&
+            productForm.get('category')?.touched
+          "
+        >
+          La categoría debe tener al menos 3 caracteres.
+        </small>
+      </div>
+    </div>
     <!-- Descripción -->
     <div class="flex items-start gap-4">
-      <label for="description" class="font-semibold w-32 pt-2">Descripción</label>
-      <textarea
-        pInputTextarea
-        id="description"
-        rows="3"
-        class="flex-auto"
-        formControlName="description"
-        name="description"
-      ></textarea>
+      <div class="flex flex-col w-32">
+        <label for="description" class="font-semibold pt-2">Descripción</label>
+      </div>
+      <div class="flex flex-col w-full">
+        <textarea
+          pInputTextarea
+          id="description"
+          rows="3"
+          class="flex-auto"
+          formControlName="description"
+          name="description"
+        ></textarea>
+      </div>
     </div>
-
     <!-- Imagen -->
     <div class="flex items-center gap-4">
-      <label for="imageUri" class="font-semibold w-32">Imagen URL</label>
-      <input
-        pInputText
-        id="imageUri"
-        class="flex-auto"
-        formControlName="imageUri"
-        name="imageUri"
-        placeholder="https://..."
-      />
+      <div class="flex flex-col w-32">
+        <label for="imageUri" class="font-semibold">Imagen URL*</label>
+      </div>
+      <div class="flex flex-col w-full">
+        <input
+          pInputText
+          id="imageUri"
+          class="flex-auto"
+          formControlName="imageUri"
+          name="imageUri"
+          placeholder="https://..."
+        />
+
+        <small
+          class="text-red-400"
+          *ngIf="
+            productForm.get('imageUri')?.hasError('required') &&
+            productForm.get('imageUri')?.touched
+          "
+        >
+          La URL de la imagen es obligatoria.
+        </small>
+        <small
+          class="text-red-400"
+          *ngIf="
+            productForm.get('imageUri')?.hasError('pattern') && productForm.get('imageUri')?.touched
+          "
+        >
+          La URL de la imagen debe ser una URL válida.
+        </small>
+      </div>
     </div>
 
-    <!-- Precio y Stock -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="flex items-center gap-4">
-        <label for="price" class="font-semibold w-32">Precio *</label>
+    <!-- Precio -->
+    <div class="flex items-center gap-4">
+      <div class="flex flex-col w-32">
+        <label for="price" class="font-semibold">Precio *</label>
+      </div>
+      <div class="flex flex-col w-full">
         <p-inputNumber
           inputId="price"
           class="flex-auto w-full"
           formControlName="price"
-          [minFractionDigits]="2" [maxFractionDigits]="5"
           name="price"
           [min]="0"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
           [useGrouping]="false"
           mode="decimal"
         />
+        <small
+          class="text-red-400"
+          *ngIf="
+            productForm.get('price')?.hasError('required') && productForm.get('price')?.touched
+          "
+        >
+          El precio es obligatorio.
+        </small>
+        <small
+          class="text-red-400"
+          *ngIf="productForm.get('price')?.hasError('min') && productForm.get('price')?.touched"
+        >
+          El precio no puede ser negativo.
+        </small>
       </div>
-
-
     </div>
-
     <!-- Botones -->
     <div class="flex justify-end gap-4 mt-4">
       <p-button (click)="closeDialog()" label="Cerrar" severity="secondary" />
