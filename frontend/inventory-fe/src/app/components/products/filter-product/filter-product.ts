@@ -42,7 +42,7 @@ export class FilterProduct {
       code: this.productFilterForm.value.code || undefined,
       category: this.productFilterForm.value.category || undefined,
       priceGreaterThanEqual: this.productFilterForm.value.priceGreaterThanEqual ? Number(this.productFilterForm.value.priceGreaterThanEqual)*100 : undefined,
-      priceLessThanEqual: this.productFilterForm.value.priceLessThan ? Number(this.productFilterForm.value.priceLessThan)*100 : undefined,
+      priceLessThan: this.productFilterForm.value.priceLessThan ? Number(this.productFilterForm.value.priceLessThan)*100 : undefined,
       priceEqual: this.productFilterForm.value.priceEqual ? Number(this.productFilterForm.value.priceEqual)*100 : undefined,
       stockGreaterThanEqual: this.productFilterForm.value.stockGreaterThanEqual ? Number(this.productFilterForm.value.stockGreaterThanEqual)*100 : undefined,
       stockLessThanEqual: this.productFilterForm.value.stockLessThan ? Number(this.productFilterForm.value.stockLessThan)*100 : undefined,

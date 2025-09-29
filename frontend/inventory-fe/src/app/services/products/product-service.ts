@@ -8,7 +8,7 @@ export interface FilterProductsRequestDto {
   code?: string;
   category?: string;
   priceGreaterThanEqual?: number;
-  priceLessThanEqual?: number;
+  priceLessThan?: number;
   priceEqual?: number;
   stockGreaterThanEqual?: number;
   stockLessThanEqual?: number;
