@@ -15,23 +15,6 @@ Link de pruebas
 
 Un sistema completo de gestión de inventario construido con arquitectura de microservicios, desplegado en Kubernetes usando Helm para el backend y Docker para el frontend.
 
-## Evidencias
-
-![Login](image.png)
-
-![Guardar Productos](image-1.png)
-
-![Listado](image-2.png)
-
-![Filtrado](image-3.png)
-
-![Editar Producto](image-4.png)
-
-![Listado Transaciones](image-5.png)
-
-![Filtrado Transaciones](image-6.png)
-
-![Creacion Transaciones](image-7.png)
 
 
 ## 🚀 Descripción del Proyecto
@@ -375,3 +358,25 @@ Si encuentras algún problema o tienes preguntas:
 ---
 
 ⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!
+
+## Evidencias
+
+## Descripciones de Evidencias
+
+- **Login:** Pantalla de inicio de sesión donde los usuarios pueden autenticarse en el sistema.
+![Login](image.png)
+- **Guardar Productos:** Interfaz para agregar o editar productos en el inventario, mostrando validaciones y campos requeridos.
+![Guardar Productos](image-1.png)
+- **Listado:** Vista general del inventario con todos los productos registrados, incluyendo paginación y filtros básicos.
+![Listado](image-2.png)
+- **Filtrado:** Ejemplo de uso de filtros avanzados para buscar productos por nombre, categoría, precio o stock.
+![Filtrado](image-3.png)
+
+- **Editar Producto:** Formulario para modificar la información de un producto existente, con controles de validación.
+![Editar Producto](image-4.png)
+- **Listado Transacciones:** Visualización de todas las transacciones realizadas, con detalles y opciones de búsqueda.
+![Listado Transaciones](image-5.png)
+- **Filtrado Transacciones:** Aplicación de filtros para consultar transacciones por fecha, tipo o usuario.
+![Filtrado Transaciones](image-6.png)
+- **Creación Transacciones:** Proceso para registrar una nueva transacción en el sistema, mostrando los campos y controles necesarios.
+![Creacion Transaciones](image-7.png)
